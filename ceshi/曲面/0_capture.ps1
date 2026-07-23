@@ -16,6 +16,10 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $ProjectRoot
 
 $CurveRoot = $PSScriptRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 $Config = Join-Path $CurveRoot "curve_scan.yaml"
 $ScanDir = Join-Path $CurveRoot "data\scan"
 $Arguments = @(
@@ -44,7 +48,7 @@ Write-Host ""
 Write-Host "Keep the curved object and ChArUco board rigidly fixed."
 Write-Host "Press SPACE to start and SPACE/S/Q to finish while the rail is moving."
 
-python @Arguments
+& $Python @Arguments
 if ($LASTEXITCODE -ne 0) {
     throw "Curve capture failed with exit code $LASTEXITCODE."
 }

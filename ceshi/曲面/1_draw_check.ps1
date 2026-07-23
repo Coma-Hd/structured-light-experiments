@@ -8,6 +8,10 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $ProjectRoot
 
 $CurveRoot = $PSScriptRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 $Config = Join-Path $CurveRoot "curve_scan.yaml"
 $ScanDir = Join-Path $CurveRoot "data\scan"
 $PositionsCsv = "$ScanDir/positions.csv"
@@ -22,7 +26,7 @@ New-Item -ItemType Directory -Force -Path $CheckDir | Out-Null
 
 if ($Keyframes -lt 3) { $Keyframes = 3 }
 if ($Keyframes -gt 5) { $Keyframes = 5 }
-python scripts/draw_keyframe_roi.py `
+& $Python scripts/draw_keyframe_roi.py `
     --config $Config `
     --images $ScanDir `
     --positions $PositionsCsv `
@@ -53,7 +57,7 @@ if ($Samples -eq 1) {
 foreach ($Index in $Indices) {
     $Image = $Images[$Index]
     $Save = "$CheckDir/check_$('{0:D3}' -f $Index).png"
-    python scripts/debug_laser.py `
+    & $Python scripts/debug_laser.py `
         --config $Config `
         --image $Image.FullName `
         --save $Save `

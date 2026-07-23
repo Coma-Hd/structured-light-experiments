@@ -1,15 +1,28 @@
-# This repository publishes only the two selected experiment workspaces.
+# Publish the runnable program and the selected experiment workspaces only.
 /*
 !/.gitignore
 !/.gitattributes
 !/README.md
-!/曲面/
-!/rail/
-!/排错与优化文档/
+!/requirements.txt
+!/config.yaml
+!/install.ps1
+!/scripts/
+!/src/
+!/ceshi/
 
-# Under rail, keep only the four-face stitching workspace.
-/rail/*
-!/rail/two_faces/
+/ceshi/*
+!/ceshi/README.md
+!/ceshi/曲面/
+!/ceshi/rail/
+!/ceshi/排错与优化文档/
+
+/ceshi/rail/*
+!/ceshi/rail/two_faces/
+
+# Python environments and caches.
+.venv/
+__pycache__/
+*.py[cod]
 
 # Keep source, configuration, reports and point clouds; omit bulky captures.
 *.png

@@ -1,0 +1,78 @@
+# ============================================================
+# 线激光 3D 重建 配置文件
+# 所有物理长度单位统一为「米(m)」，可按需改为毫米(mm)但需全局一致
+# ============================================================
+
+# ---------------- ChArUco 标定板 ----------------
+# 按你手上标定板的实际参数修改！否则位姿全错。
+charuco:
+  squares_x: 12             # 横向方格数 (角点阵列 11 → 方格 12)
+  squares_y: 9              # 纵向方格数 (角点阵列 8  → 方格 9)
+  square_length: 0.030     # 单个方格边长 (m) = 30mm
+  marker_length: 0.024     # 方格内 ArUco 标记边长 (m) = 24mm
+  dictionary: "DICT_5X5_100"  # ArUco 字典，需与打印时一致
+
+# ---------------- 激光中心提取 ----------------
+laser:
+  method: "steger"       # centroid(灰度质心，默认) | steger(高精度)
+  # 蓝色差形成快速饱和的软门控，再由亮度定位木材上的白紫激光核心。
+  # 激光平面标定和正式扫描必须使用完全相同的 score_mode/参数。
+  score_mode: "blue_gated_intensity"
+  blue_gate_threshold: 5
+  score_threshold: 14
+  min_intensity: 16
+  scan_axis: "row"      # column: 每列找一个中心(激光近水平) | row: 每行
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+
+# ---------------- 平面拟合 (激光平面标定) ----------------
+plane_fit:
+  ransac: true
+  ransac_threshold: 0.002  # 当前板/激光中心噪声约1mm，使用2mm鲁棒阈值
+  ransac_iters: 1000
+  min_inlier_ratio: 0.65   # 防止混入不同刚性安装或旧批次后仍输出伪平面
+
+# ---------------- 帧质量门控 ----------------
+gating:
+  min_charuco_corners: 6   # 每帧至少检测到的角点数，低于则丢弃
+  min_laser_points: 20     # 每帧至少的激光中心点数
+  max_reproj_error: 2.0    # 位姿重投影误差上限 (px)
+
+# ---------------- ROI 裁剪 (板坐标系, 单位 m) ----------------
+# 激光会同时打到工件和标定板；板面在 z≈0。开启后按下面范围只保留工件点，
+# 去掉 z≈0 的板面点。范围留空(null)表示该方向不限制。
+# z 的正负取决于板朝向：
+#   - 板平放、工件坐在板上方 -> 工件在 z>0 -> 用 z_min (当前配置)
+#   - 相机正对竖板、工件在板前 -> 工件在 z<0 -> 用 z_max (例: -0.02)
+# 建议先跑一次重建看 cloud.ply 的 z 直方图，再微调阈值。
+roi:
+  enabled: true
+  y_min: null      # Y>0 只保留真实区，甩掉 Y≈-700 的背景远簇
+  y_max: null
+  x_min: null
+  x_max: null
+  z_min: null   # 分离工件/板的 z 阈值，等工件真能采到再定
+  z_max: -0.05
+
+# ---------------- 点云后处理 ----------------
+postprocess:
+  voxel_size: 0.0005       # 体素降采样尺寸 (m)
+  sor_neighbors: 20        # 统计滤波邻居数
+  sor_std_ratio: 2.0       # 统计滤波标准差倍数
+  normal_radius: 0.002     # 法向估计半径 (m)
+  normal_max_nn: 30
+  # 高度图
+  height_map_res: 0.0005   # 高度图栅格分辨率 (m/px)
+  # mesh (可选)
+  mesh_method: "none"      # none | poisson | bpa
+  poisson_depth: 9
+
+# ---------------- 路径 ----------------
+paths:
+  intrinsic_images: "data/intrinsic"     # 内参标定图片目录
+  laser_images: "data/laser_plane"       # 激光平面标定图片目录
+  scan_images: "data/scan"               # 扫描帧目录
+  output: "output"                       # 输出目录
+  camera_intrinsic: "output/camera_intrinsic.yaml"
+  laser_plane: "output/laser_plane.yaml"
