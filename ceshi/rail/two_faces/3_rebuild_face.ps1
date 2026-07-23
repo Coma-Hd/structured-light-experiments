@@ -7,6 +7,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 $Config = "ceshi/rail/two_faces/${Face}_scan.yaml"
 $ScanDir = "ceshi/rail/scan/two_faces_$Face"
@@ -47,7 +51,7 @@ if (
 }
 New-Item -ItemType Directory -Force -Path $OutDir, $InputDir | Out-Null
 
-python scripts/3_reconstruct.py `
+& $Python scripts/3_reconstruct.py `
     --config $Config `
     --images $ScanDir `
     --out $RawPly `
@@ -56,13 +60,13 @@ if ($LASTEXITCODE -ne 0) {
     throw "Reconstruction failed for $Face"
 }
 
-python scripts/4_postprocess.py --config $Config --in $RawPly
+& $Python scripts/4_postprocess.py --config $Config --in $RawPly
 if ($LASTEXITCODE -ne 0) {
     throw "Postprocess failed for $Face"
 }
 
-python scripts/inspect_cloud.py --in $RawPly --out "$OutDir/inspect_raw"
-python scripts/inspect_cloud.py --in $CleanPly --out "$OutDir/inspect_clean"
+& $Python scripts/inspect_cloud.py --in $RawPly --out "$OutDir/inspect_raw"
+& $Python scripts/inspect_cloud.py --in $CleanPly --out "$OutDir/inspect_clean"
 
 Copy-Item $CleanPly "$InputDir/cloud_clean.ply" -Force
 

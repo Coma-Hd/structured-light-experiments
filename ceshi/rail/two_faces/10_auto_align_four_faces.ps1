@@ -13,8 +13,12 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
-& python scripts/auto_align_four_faces.py `
+& $Python scripts/auto_align_four_faces.py `
     --voxel-mm $VoxelMm `
     --distance-levels-mm $DistanceLevelsMm `
     --normal-angle-deg $NormalAngleDeg `

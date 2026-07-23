@@ -6,6 +6,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 # 使用 powershell -File 时，逗号分隔值会作为一个字符串传入，而不是数组。
 # 同时兼容 "-Faces face1,face2,face3,face4" 和真正的 string[] 输入。
@@ -53,7 +57,7 @@ $Arguments = @(
     "--voxel-mm", $VoxelMm
 )
 
-python @Arguments
+& $Python @Arguments
 if ($LASTEXITCODE -ne 0) {
     throw "Board-coordinate cloud merge failed (exit code $LASTEXITCODE)"
 }

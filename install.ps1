@@ -51,9 +51,21 @@ function Invoke-Check {
         "scripts\3_reconstruct.py",
         "scripts\4_postprocess.py",
         "scripts\inspect_cloud.py",
+        "scripts\merge_board_faces.py",
+        "scripts\align_four_faces_translation_loop.py",
+        "scripts\auto_align_four_faces.py",
         "ceshi\曲面\curve_scan.yaml",
         "ceshi\曲面\calibration\camera_intrinsic.yaml",
-        "ceshi\曲面\calibration\laser_plane.yaml"
+        "ceshi\曲面\calibration\laser_plane.yaml",
+        "output\camera_intrinsic.yaml",
+        "output\laser_plane.yaml",
+        "ceshi\rail\two_faces\face1_scan.yaml",
+        "ceshi\rail\two_faces\face2_scan.yaml",
+        "ceshi\rail\two_faces\face3_scan.yaml",
+        "ceshi\rail\two_faces\face4_scan.yaml",
+        "ceshi\rail\two_faces\0_capture_continuous.ps1",
+        "ceshi\rail\two_faces\3_rebuild_face.ps1",
+        "ceshi\rail\two_faces\5_merge_board_faces.ps1"
     )
     $Missing = @(
         $Required |
@@ -64,7 +76,7 @@ function Invoke-Check {
     }
 
     $env:PYTHONDONTWRITEBYTECODE = "1"
-    & $Python -c "import cv2, matplotlib, numpy, open3d, scipy, yaml; from src.config import load_config; cfg=load_config('ceshi/曲面/curve_scan.yaml'); assert cfg['paths']['camera_intrinsic']=='ceshi/曲面/calibration/camera_intrinsic.yaml'; print('Dependencies and curve configuration OK'); print('OpenCV', cv2.__version__); print('Open3D', open3d.__version__)"
+    & $Python -c "import cv2, matplotlib, numpy, open3d, scipy, yaml; from src.config import load_config; curve=load_config('ceshi/曲面/curve_scan.yaml'); faces=[load_config(f'ceshi/rail/two_faces/face{i}_scan.yaml') for i in range(1,5)]; assert curve['paths']['camera_intrinsic']=='ceshi/曲面/calibration/camera_intrinsic.yaml'; assert all(f['paths']['camera_intrinsic']=='output/camera_intrinsic.yaml' and f['paths']['laser_plane']=='output/laser_plane.yaml' for f in faces); print('Dependencies, curve and four-face configurations OK'); print('OpenCV', cv2.__version__); print('Open3D', open3d.__version__)"
     Assert-LastExitCode "Dependency or configuration check failed."
 
     & $Python -c "from pathlib import Path; import py_compile,tempfile; files=list(Path('src').glob('*.py'))+list(Path('scripts').glob('*.py')); td=tempfile.TemporaryDirectory(); [py_compile.compile(str(p),cfile=str(Path(td.name)/(str(i)+'.pyc')),doraise=True) for i,p in enumerate(files)]; print('Python compile OK:', len(files), 'files')"
@@ -102,7 +114,11 @@ if ($Action -eq "setup") {
         "ceshi\曲面\data\calibration\intrinsic",
         "ceshi\曲面\data\calibration\laser_plane",
         "ceshi\曲面\work",
-        "ceshi\曲面\output"
+        "ceshi\曲面\output",
+        "ceshi\rail\scan\two_faces_face1",
+        "ceshi\rail\scan\two_faces_face2",
+        "ceshi\rail\scan\two_faces_face3",
+        "ceshi\rail\scan\two_faces_face4"
     ) | ForEach-Object {
         New-Item -ItemType Directory -Path (Join-Path $Root $_) -Force | Out-Null
     }

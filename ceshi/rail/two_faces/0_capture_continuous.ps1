@@ -17,6 +17,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 $ScanDir = "ceshi/rail/scan/two_faces_$Face"
 $Config = "ceshi/rail/two_faces/${Face}_scan.yaml"
@@ -51,7 +55,7 @@ Write-Host "4. Stop the motor only after capture has finished."
 Write-Host "Preview keys: E/D exposure, R/F gain, B/V brightness, L laser, C ChArUco."
 Write-Host ""
 
-python @Arguments
+& $Python @Arguments
 if ($LASTEXITCODE -ne 0) {
     throw "Continuous capture failed for $Face (exit code $LASTEXITCODE)"
 }

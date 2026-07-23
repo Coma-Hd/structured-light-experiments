@@ -9,6 +9,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 if ($TargetFace -eq $SourceFace) {
     throw "TargetFace and SourceFace must be different."
@@ -33,7 +37,7 @@ Write-Host "Use Shift+LeftClick, then Q."
 Write-Host "Target: $TargetFace"
 Write-Host "Source: $SourceFace"
 
-python scripts/pick_two_face_anchors.py `
+& $Python scripts/pick_two_face_anchors.py `
     --target $Target `
     --source $Source `
     --target-name $TargetFace `

@@ -22,6 +22,8 @@ powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\1_draw_check.ps1
 powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\2_rebuild.ps1
 ```
 
+四面拼接流程位于 [`ceshi/rail/two_faces`](ceshi/rail/two_faces/)，完整采集、重建与拼接顺序见 [`拼接README.md`](ceshi/rail/two_faces/拼接README.md)。相关 PowerShell 脚本同样会自动使用 `.venv`，四面流程使用根目录 `output/` 中的专用标定文件。
+
 仅更换电脑且相机、镜头、激光、支架、分辨率、曝光和增益完全不变时，可以先验证现有标定。任何光机位置或成像参数变化，都必须按曲面文档重新标定。
 
 ---

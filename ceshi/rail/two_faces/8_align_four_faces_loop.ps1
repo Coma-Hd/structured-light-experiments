@@ -7,6 +7,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 $AnchorFiles = @(
     "ceshi/rail/two_faces/anchors_loop_face1_face2.json",
@@ -20,7 +24,7 @@ foreach ($AnchorFile in $AnchorFiles) {
     }
 }
 
-python scripts/align_four_faces_translation_loop.py `
+& $Python scripts/align_four_faces_translation_loop.py `
     --voxel-mm $VoxelMm `
     --max-translation-mm $MaxTranslationMm `
     --max-anchor-rmse-mm $MaxAnchorRmseMm

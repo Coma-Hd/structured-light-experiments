@@ -9,6 +9,11 @@
 !/scripts/
 !/src/
 !/ceshi/
+!/output/
+
+/output/*
+!/output/camera_intrinsic.yaml
+!/output/laser_plane.yaml
 
 /ceshi/*
 !/ceshi/README.md

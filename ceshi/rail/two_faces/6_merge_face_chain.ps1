@@ -5,6 +5,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 Set-Location $ProjectRoot
+$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $Python)) {
+    throw "Python environment is missing. Run .\install.ps1 -Action setup from $ProjectRoot."
+}
 
 $Anchors23 = "ceshi/rail/two_faces/anchors_face2_face3.json"
 $Anchors34 = "ceshi/rail/two_faces/anchors_face3_face4.json"
@@ -24,7 +28,7 @@ if (-not (Test-Path $Pair12Report)) {
     throw "Missing accepted Face1-Face2 report: $Pair12Report"
 }
 
-python scripts/merge_face_chain.py `
+& $Python scripts/merge_face_chain.py `
     --anchors-23 $Anchors23 `
     --anchors-34 $Anchors34 `
     --voxel-mm $VoxelMm

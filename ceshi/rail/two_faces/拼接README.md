@@ -16,6 +16,14 @@
 
 两条路线不能混用输出。采集前必须先确定路线。
 
+首次在新电脑使用时，先在仓库根目录运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Action setup
+```
+
+安装脚本会检查主程序、四面配置、专用标定文件和 Python 依赖。此目录的流程脚本会自动使用仓库内 `.venv`。
+
 ---
 
 ## 1. 先区分物理面、共享棱和扫描批次
