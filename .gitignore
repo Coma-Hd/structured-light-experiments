@@ -5,6 +5,7 @@
 !/README.md
 !/曲面/
 !/rail/
+!/排错与优化文档/
 
 # Under rail, keep only the four-face stitching workspace.
 /rail/*
