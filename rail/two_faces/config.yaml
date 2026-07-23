@@ -1,0 +1,64 @@
+# 无标定板导轨：相邻两面拼接
+# target/face1 = F1 主面 + F2 条带（最终基准坐标）
+# source/face2 = F2 主面 + F1 条带（待配准）
+
+inputs:
+  face1: "ceshi/rail/two_faces/input/face1/cloud_clean.ply"
+  face2: "ceshi/rail/two_faces/input/face2/cloud_clean.ply"
+
+output_dir: "ceshi/rail/two_faces/output"
+
+# 可选但推荐：用点选的共享棱顶部/底部约束粗平移。
+# 先运行 4_pick_shared_edge.ps1 生成。
+anchors_file: "ceshi/rail/two_faces/anchors.json"
+
+# 正式方法：不要把机械约90°直接当成点云坐标旋转角。
+initialization:
+  mode: "plane_pair"
+  plane_pair:
+    distance_threshold_m: 0.0015
+    ransac_iters: 4000
+    min_points: 500
+    # auto 同时测试“主面->邻面”和“主面->主面”，按真实重叠率选择。
+    correspondence: "auto"
+    selection_max_correspondence_m: 0.008
+    # 双平面初值已经可靠，跳过可能发生对称漂移的粗 point-to-point ICP。
+    skip_first_icp_level: true
+
+# 以下约90°参数仅供 initialization.mode="angle_search" 的旧数据兼容。
+rotation_axis: [0.0, 1.0, 0.0]
+turn: "ccw"
+
+angle_search:
+  min_deg: 70.0
+  max_deg: 110.0
+  step_deg: 10.0
+  try_both_directions: true
+
+# 单位均为米。plane_pair 默认跳过第一个粗层，仅使用中/细层精化。
+icp_levels:
+  - voxel_m: 0.004
+    max_correspondence_m: 0.015
+    iterations: 80
+    method: "point_to_point"
+  - voxel_m: 0.002
+    max_correspondence_m: 0.008
+    iterations: 60
+    method: "point_to_plane"
+  - voxel_m: 0.001
+    max_correspondence_m: 0.004
+    iterations: 40
+    method: "point_to_plane"
+
+quality:
+  # 低于 0.5 视为不可靠，避免“RMSE小但仅少量错误重叠”被接受。
+  min_fitness: 0.50
+  max_rmse_m: 0.004
+  max_rotation_change_deg: 15.0
+  # 共享棱同名锚点必须在初值和最终结果中保持一致，防止小块点云的高 fitness 伪匹配。
+  max_anchor_rmse_m: 0.010
+
+merge:
+  voxel_m: 0.0005
+  sor_neighbors: 20
+  sor_std_ratio: 2.5

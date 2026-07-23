@@ -1,0 +1,16 @@
+{
+  "method": "fixed_charuco_board_direct_merge_no_icp",
+  "inputs": {
+    "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face1\\cloud_clean.ply": 24963,
+    "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face2\\cloud_clean.ply": 20433,
+    "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face3\\cloud_clean.ply": 21375,
+    "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face4\\cloud_clean.ply": 19577
+  },
+  "raw_points": 86348,
+  "after_voxel_points": 83681,
+  "final_points": 82126,
+  "voxel_mm": 0.5,
+  "sor_neighbors": 20,
+  "sor_std_ratio": 2.5,
+  "warning": "该合并假定所有扫描期间物体与同一块ChArUco板完全固定。若板或物体移动，不能用ICP掩盖该错误。"
+}

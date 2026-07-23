@@ -1,0 +1,97 @@
+# 单方向连续曲面扫描配置。
+# 相机、激光中心算法或其参数改变后，必须重新标定激光平面。
+pose_source: "charuco"
+
+charuco:
+  squares_x: 12
+  squares_y: 9
+  square_length: 0.030
+  marker_length: 0.024
+  dictionary: "DICT_5X5_100"
+
+charuco_tracking:
+  mode: "rail_fit"
+  min_pose_frames: 8
+  min_pose_span_m: 0.030
+  min_corner_area_ratio: 0.002
+  max_center_residual_m: 0.004
+  max_rotation_deviation_deg: 1.5
+
+laser:
+  method: "steger"
+  # 必须与本目录 calibration/laser_plane.yaml 的标定响应完全一致。
+  score_mode: "blue_gated_intensity"
+  blue_gate_threshold: 5
+  score_threshold: 14
+  min_intensity: 16
+  scan_axis: "row"
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+  image_roi:
+    enabled: false
+    normalized: true
+    x_min: 0.0
+    x_max: 1.0
+    y_min: 0.0
+    y_max: 1.0
+  keyframe_roi:
+    enabled: true
+    path: "ceshi/曲面/work/roi_keyframes.json"
+
+plane_fit:
+  ransac: true
+  ransac_threshold: 0.001
+  ransac_iters: 1000
+
+gating:
+  min_charuco_corners: 6
+  min_laser_points: 12
+  max_reproj_error: 2.0
+
+rail:
+  enabled: true
+  axis: [-1.0, 0.0, 0.0]
+  distance_scale: 1.0
+  distance_unit: "mm"
+  s_ref: 0.0
+  positions_file: "positions.csv"
+
+# 首次曲面实验不做三维自动裁剪，避免削掉凸起、凹陷和边缘。
+# 物体、标定板与背景的分离由 keyframe ROI 完成。
+roi:
+  enabled: false
+  mode: "manual"
+  x_min: -1.0
+  x_max: 1.0
+  y_min: -1.0
+  y_max: 1.0
+  z_min: -1.0
+  z_max: 2.00
+
+postprocess:
+  voxel_size: 0.0002
+  sor_neighbors: 20
+  sor_std_ratio: 2.5
+  normal_radius: 0.004
+  normal_max_nn: 40
+  height_map_res: 0.0005
+  mesh_method: "none"
+  poisson_depth: 9
+  surface_trim_k: 0
+  export_aligned: false
+  # 自由曲面禁止启用 two_plane_cleanup。
+  two_plane_cleanup:
+    enabled: false
+
+pipeline:
+  extract_largest_plane: false
+  finish_mesh: false
+
+paths:
+  intrinsic_images: "ceshi/曲面/data/calibration/intrinsic"
+  laser_images: "ceshi/曲面/data/calibration/laser_plane"
+  scan_images: "ceshi/曲面/data/scan"
+  output: "ceshi/曲面/output"
+  camera_intrinsic: "ceshi/曲面/calibration/camera_intrinsic.yaml"
+  laser_plane: "ceshi/曲面/calibration/laser_plane.yaml"

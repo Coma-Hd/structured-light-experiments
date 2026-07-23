@@ -1,0 +1,544 @@
+{
+  "inputs": {
+    "face1": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face1\\cloud_clean.ply",
+    "face2": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face2\\cloud_clean.ply",
+    "face1_stats": {
+      "points": 16687,
+      "centroid_m": [
+        0.15890719407323037,
+        0.0014735557020435011,
+        0.5456401173368494
+      ],
+      "min_m": [
+        0.103706,
+        -0.057944,
+        0.488891
+      ],
+      "max_m": [
+        0.246278,
+        0.056533,
+        0.609844
+      ],
+      "span_m": [
+        0.14257199999999998,
+        0.114477,
+        0.12095300000000003
+      ]
+    },
+    "face2_stats": {
+      "points": 11286,
+      "centroid_m": [
+        0.20257532580187787,
+        -0.0176086252436646,
+        0.6271260876306946
+      ],
+      "min_m": [
+        0.162168,
+        -0.07792,
+        0.586666
+      ],
+      "max_m": [
+        0.265312,
+        0.03744,
+        0.681436
+      ],
+      "span_m": [
+        0.10314399999999999,
+        0.11536,
+        0.09477000000000002
+      ]
+    },
+    "anchors_file": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\anchors.json"
+  },
+  "registration": {
+    "convention": "p_target = T_source_to_target @ p_source_h",
+    "selected_initial_angle_deg": 24.154450822032317,
+    "candidates": [
+      {
+        "assignment": "swap",
+        "target_plane_indices_for_source": [
+          1,
+          0
+        ],
+        "target_normal_signs": [
+          1.0,
+          1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 24.154450822032317,
+        "fitness": 0.9939748360800993,
+        "rmse_m": 0.0032744007936322205,
+        "anchor_rmse_m": 0.00227069545710413,
+        "score": 0.8916498112790924,
+        "transformation": [
+          [
+            0.9127779820874597,
+            0.10721680632587975,
+            -0.3941331143885577,
+            0.25981373265623786
+          ],
+          [
+            -0.09679112535116914,
+            0.9942271502438598,
+            0.04630174695654176,
+            0.010040010464942857
+          ],
+          [
+            0.3968221685712623,
+            -0.0041146274742868486,
+            0.9178862872769963,
+            -0.1208622650078704
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "direct",
+        "target_plane_indices_for_source": [
+          0,
+          1
+        ],
+        "target_normal_signs": [
+          1.0,
+          1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 179.73964627896416,
+        "fitness": 0.9792663476874003,
+        "rmse_m": 0.0038630814726656336,
+        "anchor_rmse_m": 0.095001218738707,
+        "score": 0.8585450516665992,
+        "transformation": [
+          [
+            -0.7952522184224577,
+            -0.16603390145263347,
+            0.583100894067722,
+            -0.03966883914897942
+          ],
+          [
+            -0.1742980840743099,
+            -0.8585574951709184,
+            -0.4821817140600247,
+            0.327035013394052
+          ],
+          [
+            0.5806841542372103,
+            -0.4850894464469989,
+            0.6538303617633245,
+            0.0030559541025959314
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "direct",
+        "target_plane_indices_for_source": [
+          0,
+          1
+        ],
+        "target_normal_signs": [
+          -1.0,
+          1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 119.47727654143442,
+        "fitness": 0.708842814105972,
+        "rmse_m": 0.00476141109544952,
+        "anchor_rmse_m": 0.0024316010054014994,
+        "score": 0.5600487173731745,
+        "transformation": [
+          [
+            -0.49140298723658254,
+            0.2676459751374887,
+            -0.8287875096354107,
+            0.7712000881995009
+          ],
+          [
+            -0.20657329179785722,
+            0.8886363617851887,
+            0.4094543828425588,
+            -0.19294301650374146
+          ],
+          [
+            0.8460795348256335,
+            0.3724124709322798,
+            -0.3813900526276918,
+            0.5954904162978152
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "swap",
+        "target_plane_indices_for_source": [
+          1,
+          0
+        ],
+        "target_normal_signs": [
+          1.0,
+          -1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 178.94484190308594,
+        "fitness": 0.40962254120148855,
+        "rmse_m": 0.003089277146091683,
+        "anchor_rmse_m": 0.09499168636876153,
+        "score": 0.31308263038612344,
+        "transformation": [
+          [
+            -0.677840429243771,
+            0.21403992029226768,
+            -0.7033628260036923,
+            0.7268557855590575
+          ],
+          [
+            0.1815494760880412,
+            -0.8783274569777229,
+            -0.44224502942509597,
+            0.24039557302827963
+          ],
+          [
+            -0.7124409731442867,
+            -0.4274667131372056,
+            0.5565070250633822,
+            0.2886515937270877
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "direct",
+        "target_plane_indices_for_source": [
+          0,
+          1
+        ],
+        "target_normal_signs": [
+          1.0,
+          -1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 60.53985607479165,
+        "fitness": 0.3784334573808258,
+        "rmse_m": 0.002895188944786828,
+        "anchor_rmse_m": 0.0027639891111360775,
+        "score": 0.28795880285623743,
+        "transformation": [
+          [
+            0.4918189808195332,
+            -0.24888473322097487,
+            0.8343683117635521,
+            -0.41818624101530033
+          ],
+          [
+            0.2475343759705707,
+            0.9587017723180357,
+            0.1400630017781912,
+            -0.10751473532710032
+          ],
+          [
+            -0.8347699220854184,
+            0.13764919659693492,
+            0.5331152556977925,
+            0.3298351720010117
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "swap",
+        "target_plane_indices_for_source": [
+          1,
+          0
+        ],
+        "target_normal_signs": [
+          -1.0,
+          1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 179.22802968254953,
+        "fitness": 0.34573808258018784,
+        "rmse_m": 0.006226806669392619,
+        "anchor_rmse_m": 0.09499061986092568,
+        "score": 0.1511503741616685,
+        "transformation": [
+          [
+            0.6774244356608203,
+            -0.23280116220878158,
+            0.6977820238755509,
+            -0.36727163274325814
+          ],
+          [
+            -0.2225105602607547,
+            -0.9690106771255013,
+            -0.10727235519565398,
+            0.10609617880256214
+          ],
+          [
+            0.7011313604040716,
+            -0.08259495439200913,
+            -0.7082322281334829,
+            0.8153008179740853
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "direct",
+        "target_plane_indices_for_source": [
+          0,
+          1
+        ],
+        "target_normal_signs": [
+          -1.0,
+          -1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 178.71877372870546,
+        "fitness": 0.13459152932837143,
+        "rmse_m": 0.004199959595414534,
+        "anchor_rmse_m": 0.0949810864272693,
+        "score": 0.0033427919716672305,
+        "transformation": [
+          [
+            0.7948362248395071,
+            0.14727265953611962,
+            -0.5886816961958634,
+            0.3992529919647788
+          ],
+          [
+            0.13333699990159642,
+            -0.988780638932306,
+            -0.06733567056072531,
+            0.01945673843678978
+          ],
+          [
+            -0.5919937669774253,
+            -0.0249722210822158,
+            -0.8055555648334252,
+            1.100896457598577
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "assignment": "swap",
+        "target_plane_indices_for_source": [
+          1,
+          0
+        ],
+        "target_normal_signs": [
+          -1.0,
+          -1.0
+        ],
+        "translation_source": "anchors",
+        "rotation_angle_deg": 155.88202706711715,
+        "fitness": 0.1362750310118731,
+        "rmse_m": 0.005080194581977661,
+        "anchor_rmse_m": 0.002897630307170905,
+        "score": -0.02248104967492881,
+        "transformation": [
+          [
+            -0.9123619885045091,
+            -0.08845556440936582,
+            0.3997139165166991,
+            0.09320011452796273
+          ],
+          [
+            0.13775220952388262,
+            0.8531109838593643,
+            0.5032156376642082,
+            -0.3104977622957846
+          ],
+          [
+            -0.3855125558310474,
+            0.5141762950035016,
+            -0.7661610842068957,
+            1.0461878533066975
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    ],
+    "planes": {
+      "source": [
+        {
+          "normal": [
+            -0.20124292630793303,
+            -0.27518224727469465,
+            0.940093620548437
+          ],
+          "d": -0.5451100795769063,
+          "centroid_m": [
+            0.22166577226090095,
+            -0.01850627271894474,
+            0.6218807762916821
+          ],
+          "inlier_count": 5458
+        },
+        {
+          "normal": [
+            0.9902574604017603,
+            -0.059418208499359554,
+            0.12593505714209588
+          ],
+          "d": -0.24869567416327348,
+          "centroid_m": [
+            0.1685488849478394,
+            -0.022487202086438167,
+            0.6388430351713851
+          ],
+          "inlier_count": 3355
+        }
+      ],
+      "target": [
+        {
+          "normal": [
+            0.7538978963628873,
+            -0.18195991590829347,
+            0.6312911775577575
+          ],
+          "d": -0.4525429198479485,
+          "centroid_m": [
+            0.14107017913198552,
+            0.00013387193816884158,
+            0.5484232636147446
+          ],
+          "inlier_count": 8410
+        },
+        {
+          "normal": [
+            -0.5837163003786722,
+            -0.21058715526522062,
+            0.7841736610659259
+          ],
+          "d": -0.2945662953060463,
+          "centroid_m": [
+            0.21328416630196922,
+            0.004817818623875523,
+            0.5356955115487496
+          ],
+          "inlier_count": 4113
+        }
+      ]
+    },
+    "levels": [
+      {
+        "level": 0,
+        "voxel_m": 0.002,
+        "max_correspondence_m": 0.008,
+        "method": "point_to_plane",
+        "fitness": 0.9929520741039065,
+        "rmse_m": 0.0025438831034125023
+      },
+      {
+        "level": 1,
+        "voxel_m": 0.001,
+        "max_correspondence_m": 0.004,
+        "method": "point_to_plane",
+        "fitness": 0.8979272224781207,
+        "rmse_m": 0.0017182622180445864
+      }
+    ],
+    "final": {
+      "fitness": 0.8979272224781207,
+      "rmse_m": 0.0017182622180445882,
+      "accepted": true,
+      "min_fitness": 0.5,
+      "max_rmse_m": 0.004,
+      "rotation_change_from_selected_init_deg": 1.6665382864560152,
+      "max_rotation_change_deg": 15.0,
+      "transformation": [
+        [
+          0.9006132505076657,
+          0.1106386258102638,
+          -0.4203033041612136,
+          0.2781005066148187
+        ],
+        [
+          -0.09934449883854461,
+          0.9938583836165792,
+          0.048746116415142766,
+          0.012935857707658894
+        ],
+        [
+          0.4231151658361296,
+          -0.0021465772421867075,
+          0.9060733682465278,
+          -0.12147604060887937
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_determinant": 1.0000000000000002,
+      "translation_m": [
+        0.2781005066148187,
+        0.012935857707658894,
+        -0.12147604060887937
+      ]
+    },
+    "initialization": {
+      "mode": "plane_pair",
+      "selected_assignment": "swap",
+      "used_anchors": true,
+      "anchor_count": 2
+    }
+  },
+  "outputs": {
+    "face1_reference": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\aligned\\face1_reference.ply",
+    "face2_aligned": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\aligned\\face2_aligned.ply",
+    "comparison_colored": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\comparison_colored.ply",
+    "merged_raw": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\cloud_merged_raw.ply",
+    "merged_clean": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\cloud_merged_clean.ply",
+    "transform": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\transform_face2_to_face1.json",
+    "report": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\output\\registration_report.json"
+  },
+  "merged": {
+    "raw_points": 27973,
+    "clean_points": 27099,
+    "no_largest_cluster_filter": true
+  }
+}

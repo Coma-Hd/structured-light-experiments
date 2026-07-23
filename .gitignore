@@ -1,0 +1,24 @@
+# This repository publishes only the two selected experiment workspaces.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/曲面/
+!/rail/
+
+# Under rail, keep only the four-face stitching workspace.
+/rail/*
+!/rail/two_faces/
+
+# Keep source, configuration, reports and point clouds; omit bulky captures.
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.tiff
+*.npy
+*.npz
+*.7z
+*.zip
+*.rar

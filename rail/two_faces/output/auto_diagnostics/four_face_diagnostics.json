@@ -1,0 +1,566 @@
+{
+  "method": "read_only_four_face_board_frame_diagnostics",
+  "units": {
+    "coordinates": "m",
+    "reported_distances": "mm"
+  },
+  "inputs": {
+    "face1": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face1\\cloud_clean.ply",
+    "face2": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face2\\cloud_clean.ply",
+    "face3": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face3\\cloud_clean.ply",
+    "face4": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\input\\face4\\cloud_clean.ply"
+  },
+  "faces": {
+    "face1": {
+      "point_count": 54792,
+      "plane": [
+        0.08498995951280199,
+        -0.9963655898948162,
+        0.005684897146595869,
+        0.08482739590039358
+      ],
+      "inlier_count": 39593,
+      "inlier_ratio": 0.7226054898525333,
+      "plane_rms_mm": 0.8207281059690816,
+      "inlier_center_m": [
+        0.1719690957997644,
+        0.09946367442477208,
+        -0.05144489533503371
+      ],
+      "distance_to_theoretical_adjacent_corners": {
+        "nearest_mm": 8.948548695559268,
+        "p05_mm": 13.245546437775698,
+        "p25_mm": 22.565931693578502,
+        "median_mm": 34.39989251853392
+      }
+    },
+    "face2": {
+      "point_count": 55072,
+      "plane": [
+        -0.9985489194288426,
+        -0.05029031838123467,
+        0.019259786722724034,
+        0.11627378334127038
+      ],
+      "inlier_count": 53270,
+      "inlier_ratio": 0.9672791981406159,
+      "plane_rms_mm": 0.7049339950264677,
+      "inlier_center_m": [
+        0.10777373090857846,
+        0.15168970956448455,
+        -0.05244967236718632
+      ],
+      "distance_to_theoretical_adjacent_corners": {
+        "nearest_mm": 0.030085599142701393,
+        "p05_mm": 5.0654187360819805,
+        "p25_mm": 17.254552104958428,
+        "median_mm": 28.978565309960572
+      }
+    },
+    "face3": {
+      "point_count": 70550,
+      "plane": [
+        -0.12861683644813224,
+        0.991446093180033,
+        -0.022189044596913288,
+        -0.18465361756643975
+      ],
+      "inlier_count": 56652,
+      "inlier_ratio": 0.8030049610205529,
+      "plane_rms_mm": 0.7130647443619403,
+      "inlier_center_m": [
+        0.17259587900692047,
+        0.20745945685059544,
+        -0.05043203164054271
+      ],
+      "distance_to_theoretical_adjacent_corners": {
+        "nearest_mm": 8.257918560336583,
+        "p05_mm": 13.352501280662718,
+        "p25_mm": 22.99728783107672,
+        "median_mm": 34.946477531900264
+      }
+    },
+    "face4": {
+      "point_count": 55699,
+      "plane": [
+        0.9991366766970854,
+        0.04148473122582278,
+        0.002217736193807661,
+        -0.2298741345735453
+      ],
+      "inlier_count": 54592,
+      "inlier_ratio": 0.9801253164329701,
+      "plane_rms_mm": 0.6760736104313864,
+      "inlier_center_m": [
+        0.22377613953509506,
+        0.15538285153502332,
+        -0.052074623159070486
+      ],
+      "distance_to_theoretical_adjacent_corners": {
+        "nearest_mm": 4.517508437469916,
+        "p05_mm": 9.560003508329833,
+        "p25_mm": 19.842684184475868,
+        "median_mm": 31.422029641193458
+      }
+    }
+  },
+  "plane_angles_deg": {
+    "adjacent": {
+      "face1_face2": 88.0143267150985,
+      "face2_face3": 85.51818356052723,
+      "face3_face4": 84.98450591684707,
+      "face4_face1": 87.50138516899169
+    },
+    "opposite": {
+      "face1_face3": 2.687591137448329,
+      "face2_face4": 1.3304371676350855
+    }
+  },
+  "z_reference_m": -0.051588,
+  "adjacent_plane_xy_corners_m": {
+    "face1_face2": [
+      0.11069921444298905,
+      0.09428511595821057
+    ],
+    "face2_face3": [
+      0.10543699225406833,
+      0.19877016297477454
+    ],
+    "face3_face4": [
+      0.2213100878493246,
+      0.2138019746763187
+    ],
+    "face4_face1": [
+      0.22586461499573426,
+      0.10410872170044291
+    ]
+  },
+  "adjacent_cloud_proximity_coverage": {
+    "face1_face2": {
+      "2": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "5": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "10": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "15": {
+        "first_to_second": 0.00038326763031099433,
+        "second_to_first": 0.0010894828588030214,
+        "symmetric_min": 0.00038326763031099433
+      },
+      "20": {
+        "first_to_second": 0.058658198277120745,
+        "second_to_first": 0.06406159209761766,
+        "symmetric_min": 0.058658198277120745
+      },
+      "25": {
+        "first_to_second": 0.12158709300627829,
+        "second_to_first": 0.13002977919814063,
+        "symmetric_min": 0.12158709300627829
+      }
+    },
+    "face2_face3": {
+      "2": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "5": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "10": {
+        "first_to_second": 0.00018158047646717025,
+        "second_to_first": 0.00036853295535081503,
+        "symmetric_min": 0.00018158047646717025
+      },
+      "15": {
+        "first_to_second": 0.03558977338756537,
+        "second_to_first": 0.03381998582565556,
+        "symmetric_min": 0.03381998582565556
+      },
+      "20": {
+        "first_to_second": 0.11557597327135387,
+        "second_to_first": 0.08698795180722892,
+        "symmetric_min": 0.08698795180722892
+      },
+      "25": {
+        "first_to_second": 0.17931072051133062,
+        "second_to_first": 0.1402834868887314,
+        "symmetric_min": 0.1402834868887314
+      }
+    },
+    "face3_face4": {
+      "2": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "5": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "10": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "15": {
+        "first_to_second": 0.042296243798724306,
+        "second_to_first": 0.04057523474389127,
+        "symmetric_min": 0.04057523474389127
+      },
+      "20": {
+        "first_to_second": 0.10698795180722892,
+        "second_to_first": 0.1036643386775346,
+        "symmetric_min": 0.1036643386775346
+      },
+      "25": {
+        "first_to_second": 0.1670871722182849,
+        "second_to_first": 0.1618700515269574,
+        "symmetric_min": 0.1618700515269574
+      }
+    },
+    "face4_face1": {
+      "2": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "5": {
+        "first_to_second": 0.0,
+        "second_to_first": 0.0,
+        "symmetric_min": 0.0
+      },
+      "10": {
+        "first_to_second": 0.0005924702418355805,
+        "second_to_first": 0.0010950503723171265,
+        "symmetric_min": 0.0005924702418355805
+      },
+      "15": {
+        "first_to_second": 0.0769672705075495,
+        "second_to_first": 0.05203314352460213,
+        "symmetric_min": 0.05203314352460213
+      },
+      "20": {
+        "first_to_second": 0.14386254690389413,
+        "second_to_first": 0.11065484012264565,
+        "symmetric_min": 0.11065484012264565
+      },
+      "25": {
+        "first_to_second": 0.2050844718935708,
+        "second_to_first": 0.16608263980143087,
+        "symmetric_min": 0.16608263980143087
+      }
+    }
+  },
+  "tracking": {
+    "face1": {
+      "available": true,
+      "path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\work\\face1\\output\\cloud_charuco_tracking.yaml",
+      "accepted": true,
+      "total_frames": 511,
+      "valid_detection_frames": 511,
+      "inlier_pose_frames": 502,
+      "pose_span_mm": 102.014726,
+      "center_fit_rms_mm": 1.938291686624044,
+      "max_center_residual_mm": 4.507239685618369,
+      "max_rotation_deviation_deg": 0.700099164374531,
+      "mean_corner_count": 52.06374501992032,
+      "mean_reprojection_error_px": 1.1877599891798782,
+      "min_corner_area_ratio": 0.02395625,
+      "rejections": {
+        "no_position": 0,
+        "no_detection": 0,
+        "too_few_corners": 0,
+        "corners_too_clustered": 0,
+        "pose_failed": 0,
+        "reprojection_error": 0
+      }
+    },
+    "face2": {
+      "available": true,
+      "path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\work\\face2\\output\\cloud_charuco_tracking.yaml",
+      "accepted": true,
+      "total_frames": 494,
+      "valid_detection_frames": 494,
+      "inlier_pose_frames": 473,
+      "pose_span_mm": 98.639073,
+      "center_fit_rms_mm": 1.8203289702438357,
+      "max_center_residual_mm": 4.025868070289612,
+      "max_rotation_deviation_deg": 0.573005646708795,
+      "mean_corner_count": 32.82029598308668,
+      "mean_reprojection_error_px": 1.0731697989532116,
+      "min_corner_area_ratio": 0.012041666666666668,
+      "rejections": {
+        "no_position": 0,
+        "no_detection": 0,
+        "too_few_corners": 0,
+        "corners_too_clustered": 0,
+        "pose_failed": 0,
+        "reprojection_error": 0
+      }
+    },
+    "face3": {
+      "available": true,
+      "path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\work\\face3\\output\\cloud_charuco_tracking.yaml",
+      "accepted": true,
+      "total_frames": 515,
+      "valid_detection_frames": 515,
+      "inlier_pose_frames": 515,
+      "pose_span_mm": 102.827688,
+      "center_fit_rms_mm": 0.8087300662827049,
+      "max_center_residual_mm": 2.0968826260325906,
+      "max_rotation_deviation_deg": 0.3816482311191633,
+      "mean_corner_count": 78.80388349514563,
+      "mean_reprojection_error_px": 1.2729630721319187,
+      "min_corner_area_ratio": 0.07254791666666667,
+      "rejections": {
+        "no_position": 0,
+        "no_detection": 0,
+        "too_few_corners": 0,
+        "corners_too_clustered": 0,
+        "pose_failed": 0,
+        "reprojection_error": 0
+      }
+    },
+    "face4": {
+      "available": true,
+      "path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\work\\face4\\output\\cloud_charuco_tracking.yaml",
+      "accepted": true,
+      "total_frames": 501,
+      "valid_detection_frames": 501,
+      "inlier_pose_frames": 501,
+      "pose_span_mm": 100.101424,
+      "center_fit_rms_mm": 0.8773139356744443,
+      "max_center_residual_mm": 2.921436071446307,
+      "max_rotation_deviation_deg": 0.40949656440068943,
+      "mean_corner_count": 52.047904191616766,
+      "mean_reprojection_error_px": 1.089244546500597,
+      "min_corner_area_ratio": 0.029366666666666666,
+      "rejections": {
+        "no_position": 0,
+        "no_detection": 0,
+        "too_few_corners": 0,
+        "corners_too_clustered": 0,
+        "pose_failed": 0,
+        "reprojection_error": 0
+      }
+    }
+  },
+  "per_frame_vs_sampled_rail_fit": {
+    "enabled": true,
+    "requested_samples_per_face": 9,
+    "faces": {
+      "face1": {
+        "available": true,
+        "face": "face1",
+        "config": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\face1_scan.yaml",
+        "requested_samples": 9,
+        "interpretation": "仅量化逐帧 PnP 与固定姿态直线轨迹平滑之间的点位差异；不单独证明坐标转换错误。",
+        "scan_dir": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face1",
+        "positions": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face1\\positions.csv",
+        "selected_frames": 9,
+        "valid_pose_samples": 9,
+        "inlier_pose_samples": 9,
+        "comparison_frames": 9,
+        "comparison_points": 1054,
+        "rejections": {
+          "image_read": 0,
+          "detection": 0,
+          "corners": 0,
+          "area": 0,
+          "pose": 0,
+          "reprojection": 0,
+          "laser": 0
+        },
+        "sample_fit": {
+          "center_fit_rms_mm": 1.1166521063896095,
+          "max_center_residual_mm": 1.9157020208529978,
+          "max_rotation_deviation_deg": 0.4119357479344091,
+          "motion_per_nominal_distance": [
+            -0.9684876319123992,
+            0.033706382047217535,
+            0.01523750467459295
+          ]
+        },
+        "per_frame_vs_sampled_rail_fit_point_difference_mm": {
+          "rms": 1.5640873161874724,
+          "median": 1.2035515791366356,
+          "p95": 2.500215456768596,
+          "max": 2.6102928427027434
+        }
+      },
+      "face2": {
+        "available": true,
+        "face": "face2",
+        "config": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\face2_scan.yaml",
+        "requested_samples": 9,
+        "interpretation": "仅量化逐帧 PnP 与固定姿态直线轨迹平滑之间的点位差异；不单独证明坐标转换错误。",
+        "scan_dir": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face2",
+        "positions": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face2\\positions.csv",
+        "selected_frames": 9,
+        "valid_pose_samples": 9,
+        "inlier_pose_samples": 9,
+        "comparison_frames": 9,
+        "comparison_points": 1086,
+        "rejections": {
+          "image_read": 0,
+          "detection": 0,
+          "corners": 0,
+          "area": 0,
+          "pose": 0,
+          "reprojection": 0,
+          "laser": 0
+        },
+        "sample_fit": {
+          "center_fit_rms_mm": 1.9503619736677957,
+          "max_center_residual_mm": 3.469841639308349,
+          "max_rotation_deviation_deg": 0.4981527573823566,
+          "motion_per_nominal_distance": [
+            0.01375472175039174,
+            0.9714719844954596,
+            -0.007908203365215713
+          ]
+        },
+        "per_frame_vs_sampled_rail_fit_point_difference_mm": {
+          "rms": 1.0940868182264316,
+          "median": 0.8248982443817552,
+          "p95": 1.780700363920123,
+          "max": 1.9822541240189857
+        }
+      },
+      "face3": {
+        "available": true,
+        "face": "face3",
+        "config": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\face3_scan.yaml",
+        "requested_samples": 9,
+        "interpretation": "仅量化逐帧 PnP 与固定姿态直线轨迹平滑之间的点位差异；不单独证明坐标转换错误。",
+        "scan_dir": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face3",
+        "positions": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face3\\positions.csv",
+        "selected_frames": 9,
+        "valid_pose_samples": 9,
+        "inlier_pose_samples": 9,
+        "comparison_frames": 9,
+        "comparison_points": 1345,
+        "rejections": {
+          "image_read": 0,
+          "detection": 0,
+          "corners": 0,
+          "area": 0,
+          "pose": 0,
+          "reprojection": 0,
+          "laser": 0
+        },
+        "sample_fit": {
+          "center_fit_rms_mm": 0.811959402650631,
+          "max_center_residual_mm": 1.374099855067817,
+          "max_rotation_deviation_deg": 0.2850126555443986,
+          "motion_per_nominal_distance": [
+            0.9699219892829511,
+            -0.03008361880268376,
+            0.0006884860328964335
+          ]
+        },
+        "per_frame_vs_sampled_rail_fit_point_difference_mm": {
+          "rms": 0.8534324397047124,
+          "median": 0.7095913925337305,
+          "p95": 1.397158743534011,
+          "max": 1.52090747599825
+        }
+      },
+      "face4": {
+        "available": true,
+        "face": "face4",
+        "config": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\two_faces\\face4_scan.yaml",
+        "requested_samples": 9,
+        "interpretation": "仅量化逐帧 PnP 与固定姿态直线轨迹平滑之间的点位差异；不单独证明坐标转换错误。",
+        "scan_dir": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face4",
+        "positions": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\rail\\scan\\two_faces_face4\\positions.csv",
+        "selected_frames": 9,
+        "valid_pose_samples": 9,
+        "inlier_pose_samples": 9,
+        "comparison_frames": 9,
+        "comparison_points": 1098,
+        "rejections": {
+          "image_read": 0,
+          "detection": 0,
+          "corners": 0,
+          "area": 0,
+          "pose": 0,
+          "reprojection": 0,
+          "laser": 0
+        },
+        "sample_fit": {
+          "center_fit_rms_mm": 0.8586057667088757,
+          "max_center_residual_mm": 1.2789152950044238,
+          "max_rotation_deviation_deg": 0.2870293523237068,
+          "motion_per_nominal_distance": [
+            -0.055971377570093246,
+            -0.969452209597145,
+            -0.0073689291657989976
+          ]
+        },
+        "per_frame_vs_sampled_rail_fit_point_difference_mm": {
+          "rms": 0.9259416948624596,
+          "median": 0.698001296364946,
+          "p95": 1.6120803576717913,
+          "max": 1.7573532649323642
+        }
+      }
+    },
+    "interpretation": "该比较只提供轨迹平滑误差证据，不参与坐标转换错误归因。"
+  },
+  "laser_plane": {
+    "available": true,
+    "path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\output\\laser_plane.yaml",
+    "plane_abcd": [
+      -0.9014493743966995,
+      0.03337374814858346,
+      0.4315961287272096,
+      -0.16412767189607858
+    ],
+    "normal": [
+      -0.9014493743966995,
+      0.03337374814858346,
+      0.4315961287272096
+    ],
+    "d": -0.16412767189607858,
+    "fit_rms_m": 0.0007313940798135809,
+    "num_points": 1877,
+    "frame": "camera"
+  },
+  "transform_cam_to_board_roundtrip": {
+    "max_abs_m": 1.1102230246251565e-16,
+    "max_point_error_m": 1.1857187100668868e-16,
+    "rms_point_error_m": 6.950449105756632e-17
+  },
+  "cause_classification": [
+    {
+      "code": "insufficient_overlap",
+      "supported": true,
+      "evidence": "至少一组相邻点云在 25 mm 内双向覆盖率低于 20%"
+    },
+    {
+      "code": "edge_coverage_missing",
+      "supported": true,
+      "evidence": "至少一面最靠近理论角点的 5% 点仍超过 10 mm"
+    },
+    {
+      "code": "coordinate_transform_error",
+      "supported": false,
+      "evidence": "数值往返测试仅验证实现自洽；当前几何证据不足以把问题归因于坐标转换。优先处理重叠与边缘覆盖。"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "normalized": true,
+  "keyframes": [
+    {
+      "image": "img_000000.png",
+      "distance_mm": 0.0,
+      "roi": {
+        "x_min": 0.6025,
+        "x_max": 0.65875,
+        "y_min": 0.6066666666666667,
+        "y_max": 0.8133333333333334
+      }
+    },
+    {
+      "image": "img_000125.png",
+      "distance_mm": 25.019532,
+      "roi": {
+        "x_min": 0.5875,
+        "x_max": 0.635,
+        "y_min": 0.61,
+        "y_max": 0.8133333333333334
+      }
+    },
+    {
+      "image": "img_000250.png",
+      "distance_mm": 50.07042,
+      "roi": {
+        "x_min": 0.585,
+        "x_max": 0.6425,
+        "y_min": 0.61,
+        "y_max": 0.8183333333333334
+      }
+    },
+    {
+      "image": "img_000375.png",
+      "distance_mm": 75.076985,
+      "roi": {
+        "x_min": 0.57625,
+        "x_max": 0.645,
+        "y_min": 0.61,
+        "y_max": 0.815
+      }
+    },
+    {
+      "image": "img_000500.png",
+      "distance_mm": 100.101424,
+      "roi": {
+        "x_min": 0.5525,
+        "x_max": 0.62,
+        "y_min": 0.6166666666666667,
+        "y_max": 0.8133333333333334
+      }
+    }
+  ]
+}

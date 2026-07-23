@@ -1,0 +1,37 @@
+{
+  "description": "Corresponding shared-edge anchors; same order in both arrays.",
+  "target_name": "face4",
+  "source_name": "face1",
+  "target_indices": [
+    3472,
+    18986
+  ],
+  "source_indices": [
+    1165,
+    68
+  ],
+  "target_points": [
+    [
+      0.124353,
+      0.190085,
+      -0.000866
+    ],
+    [
+      0.124585,
+      0.19158550000000002,
+      -0.096105
+    ]
+  ],
+  "source_points": [
+    [
+      0.125447,
+      0.192573,
+      -0.004933
+    ],
+    [
+      0.127972,
+      0.193907,
+      -0.096209
+    ]
+  ]
+}

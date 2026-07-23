@@ -1,0 +1,101 @@
+# 第二次扫描：F2 主面 + F1 条带
+# 相机+激光整体从俯视图约逆时针转 90 度；允许距离变化。
+pose_source: "charuco"
+
+charuco:
+  squares_x: 12
+  squares_y: 9
+  square_length: 0.030
+  marker_length: 0.024
+  dictionary: "DICT_5X5_100"
+
+# 标定板和物体保持不动；每次整轨转位后自动重新拟合该次导轨方向。
+charuco_tracking:
+  mode: "rail_fit"
+  min_pose_frames: 8
+  min_pose_span_m: 0.030
+  min_corner_area_ratio: 0.002
+  max_center_residual_m: 0.004
+  max_rotation_deviation_deg: 1.5
+
+laser:
+  method: "steger"
+  # 必须与当前 gated 激光平面使用完全相同的响应参数。
+  score_mode: "blue_gated_intensity"
+  blue_gate_threshold: 5
+  score_threshold: 14
+  min_intensity: 16
+  scan_axis: "row"
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+  image_roi:
+    enabled: false
+    normalized: true
+    x_min: 0.0
+    x_max: 1.0
+    y_min: 0.0
+    y_max: 1.0
+  keyframe_roi:
+    enabled: true
+    path: "ceshi/rail/two_faces/work/face2/roi_keyframes.json"
+
+plane_fit:
+  ransac: true
+  ransac_threshold: 0.001
+  ransac_iters: 1000
+
+gating:
+  min_charuco_corners: 6
+  min_laser_points: 12
+  max_reproj_error: 2.0
+
+rail:
+  enabled: true
+  # 整条导轨与传感器一起转位，导轨轴在相机坐标中保持一致。
+  axis: [-1.0, 0.0, 0.0]
+  # 实际位移/positions.csv 名义位移；由 calibrate_cube_motion.py 自动修正。
+  distance_scale: 1.0
+  distance_unit: "mm"
+  s_ref: 0.0
+  positions_file: "positions.csv"
+
+roi:
+  enabled: true
+  mode: "auto"
+  auto_z_bins: 40
+  auto_z_pad_m: 0.012
+  auto_xy_pad_m: 0.005
+  auto_percentile_lo: 0.5
+  auto_percentile_hi: 99.5
+  # 以下宽范围仅作为 auto 之外的人工参考，不参与 auto 裁剪。
+  x_min: 0.160
+  x_max: 0.315
+  y_min: -0.105
+  y_max: 0.070
+  z_min: 0.640
+  z_max: 0.815
+
+postprocess:
+  voxel_size: 0.0002
+  sor_neighbors: 20
+  sor_std_ratio: 2.5
+  normal_radius: 0.004
+  normal_max_nn: 40
+  height_map_res: 0.0005
+  mesh_method: "none"
+  poisson_depth: 9
+  surface_trim_k: 0
+  export_aligned: false
+
+pipeline:
+  extract_largest_plane: false
+  finish_mesh: false
+
+paths:
+  intrinsic_images: "data/intrinsic"
+  laser_images: "data/laser_plane"
+  scan_images: "ceshi/rail/scan/two_faces_face2"
+  output: "ceshi/rail/two_faces/work/face2/output"
+  camera_intrinsic: "output/camera_intrinsic.yaml"
+  laser_plane: "output/laser_plane.yaml"
