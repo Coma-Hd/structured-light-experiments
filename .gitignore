@@ -1,4 +1,4 @@
-# Publish the runnable program and the selected experiment workspaces only.
+﻿# Publish the runnable program and the selected experiment workspaces only.
 /*
 !/.gitignore
 !/.gitattributes
@@ -8,6 +8,7 @@
 !/install.ps1
 !/scripts/
 !/src/
+!/tests/
 !/ceshi/
 !/output/
 
@@ -39,3 +40,4 @@ __pycache__/
 *.7z
 *.zip
 *.rar
+
