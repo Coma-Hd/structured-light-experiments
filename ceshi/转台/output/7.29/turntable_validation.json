@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "title": "半球重建验证报告",
+  "generated_at": "2026-07-29T17:47:35+08:00",
+  "true_diameter_mm": 98.9,
+  "settings": {
+    "method": "ransac_initial_soft_l1_sphere_no_icp",
+    "inlier_threshold_mm": 2.5,
+    "pair_max_points": 50000,
+    "common_overlap_percentile": 2.0
+  },
+  "scans": [
+    {
+      "name": "cloud_clean",
+      "cloud_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\转台扫描\\output\\cloud_clean.ply",
+      "tracking_path": null,
+      "true_diameter_mm": 98.9,
+      "diameter_error_mm": 8.497307385785021,
+      "diameter_error_percent": 8.591817376931264,
+      "sphere": {
+        "center_m": [
+          0.03294996059142462,
+          0.01676479528495122,
+          0.40639114741355586
+        ],
+        "radius_m": 0.05369865369289251,
+        "diameter_mm": 107.39730738578503,
+        "point_count": 56209,
+        "fit_point_count": 50000,
+        "inlier_count": 55550,
+        "inlier_ratio": 0.988275898877404,
+        "inlier_threshold_mm": 2.5,
+        "residual_mean_mm": 0.009387807840815082,
+        "residual_median_abs_mm": 0.5205063380554869,
+        "residual_rms_mm": 0.7884619598082788,
+        "residual_p95_abs_mm": 1.5558713997684108,
+        "fraction_abs_lt_0_5mm": 0.4829342934293429,
+        "fraction_abs_lt_1_0mm": 0.7925292529252925,
+        "bbox_span_mm": [
+          108.449,
+          72.03599999999999,
+          99.54899999999999
+        ]
+      },
+      "tracking": {}
+    }
+  ],
+  "calibration": {
+    "intrinsic_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\转台扫描\\calibration\\camera_intrinsic.yaml",
+    "intrinsic": {
+      "image_width": 800,
+      "image_height": 600,
+      "reproj_error_px": 0.45108157723756875,
+      "K": {
+        "fx": 715.7090871837568,
+        "fy": 716.2608009600991,
+        "cx": 616.4059873641716,
+        "cy": 374.8858448006546
+      },
+      "camera_matrix": [
+        [
+          715.7090871837568,
+          0.0,
+          616.4059873641716
+        ],
+        [
+          0.0,
+          716.2608009600991,
+          374.8858448006546
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dist_coeffs": [
+        0.006320295753794962,
+        0.009938315422746534,
+        -0.001065422013115388,
+        -0.0009185699291616768,
+        -0.06097350026695739
+      ]
+    },
+    "laser_plane_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\转台扫描\\calibration\\laser_plane.yaml",
+    "laser_plane": {
+      "plane_abcd": [
+        0.9704990978884621,
+        0.042769008148441486,
+        -0.23728108423909355,
+        0.06962535868691508
+      ],
+      "normal": [
+        0.9704990978884621,
+        0.042769008148441486,
+        -0.23728108423909355
+      ],
+      "d": 0.06962535868691508,
+      "fit_rms_m": 0.00022279843019625773,
+      "num_points": 2718,
+      "frame": "camera"
+    }
+  }
+}

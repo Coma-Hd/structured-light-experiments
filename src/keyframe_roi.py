@@ -1,4 +1,4 @@
-"""关键帧图像 ROI：按导轨行程插值。
+"""关键帧图像 ROI：按导轨行程、转台角度或扫描帧序号插值。
 
 JSON 格式示例::
 
@@ -13,6 +13,8 @@ JSON 格式示例::
         }
       ]
     }
+
+机械臂/手持扫描无行程与转角时，使用 ``frame_index``（排序后的扫描序号）插值。
 """
 from __future__ import annotations
 
@@ -58,21 +60,43 @@ def load_keyframe_roi_file(path: str) -> Dict[str, Any]:
         for k in ROI_KEYS:
             if k not in roi:
                 raise ValueError(f"keyframe[{i}] missing roi.{k}")
+        angle_deg = fr.get("angle_deg", None)
         dist_mm = fr.get("distance_mm", None)
+        frame_index = fr.get("frame_index", None)
         if dist_mm is None and fr.get("distance_m") is not None:
             dist_mm = float(fr["distance_m"]) * 1000.0
-        if dist_mm is None:
-            raise ValueError(f"keyframe[{i}] missing distance_mm")
-        cleaned.append({
+        if angle_deg is not None:
+            parameter_key = "angle_deg"
+            parameter_value = float(angle_deg)
+        elif dist_mm is not None:
+            parameter_key = "distance_mm"
+            parameter_value = float(dist_mm)
+        elif frame_index is not None:
+            parameter_key = "frame_index"
+            parameter_value = float(frame_index)
+        else:
+            raise ValueError(
+                f"keyframe[{i}] missing distance_mm, angle_deg or frame_index")
+        item = {
             "image": str(fr.get("image", "")),
-            "distance_mm": float(dist_mm),
+            "parameter_key": parameter_key,
+            "parameter_value": parameter_value,
             "roi": {k: float(roi[k]) for k in ROI_KEYS},
-        })
-    cleaned.sort(key=lambda x: x["distance_mm"])
+        }
+        item[parameter_key] = parameter_value
+        cleaned.append(item)
+    parameter_keys = {item["parameter_key"] for item in cleaned}
+    if len(parameter_keys) != 1:
+        raise ValueError(
+            "keyframe ROI cannot mix distance_mm / angle_deg / frame_index"
+        )
+    parameter_key = next(iter(parameter_keys))
+    cleaned.sort(key=lambda x: x["parameter_value"])
     return {
         "version": int(data.get("version", 1)),
         "normalized": normalized,
         "path": path,
+        "parameter_key": parameter_key,
         "keyframes": cleaned,
     }
 
@@ -97,21 +121,27 @@ def _lerp(a: float, b: float, t: float) -> float:
 
 def interpolate_roi_box(
     keyframes: Sequence[Dict[str, Any]],
-    distance_mm: float,
+    parameter_value: float,
 ) -> Dict[str, float]:
-    """按 distance_mm 在关键帧之间线性插值 ROI 盒。"""
+    """按行程、角度或帧序号在关键帧之间线性插值 ROI 盒。"""
     if not keyframes:
         raise ValueError("empty keyframes")
-    xs = [float(k["distance_mm"]) for k in keyframes]
-    if distance_mm <= xs[0]:
+    xs = [
+        float(k.get(
+            "parameter_value",
+            k.get("angle_deg", k.get("distance_mm", k.get("frame_index"))),
+        ))
+        for k in keyframes
+    ]
+    if parameter_value <= xs[0]:
         return dict(keyframes[0]["roi"])
-    if distance_mm >= xs[-1]:
+    if parameter_value >= xs[-1]:
         return dict(keyframes[-1]["roi"])
 
-    i = int(np.searchsorted(xs, distance_mm, side="right") - 1)
+    i = int(np.searchsorted(xs, parameter_value, side="right") - 1)
     i = max(0, min(i, len(keyframes) - 2))
     d0, d1 = xs[i], xs[i + 1]
-    t = 0.0 if d1 <= d0 else (distance_mm - d0) / (d1 - d0)
+    t = 0.0 if d1 <= d0 else (parameter_value - d0) / (d1 - d0)
     r0, r1 = keyframes[i]["roi"], keyframes[i + 1]["roi"]
     out = {k: _lerp(r0[k], r1[k], t) for k in ROI_KEYS}
     # keep ordering
@@ -128,6 +158,40 @@ def roi_override_for_distance_m(
 ) -> Dict[str, Any]:
     """返回可直接喂给 extract_laser_centers 的 image_roi 字典。"""
     box = interpolate_roi_box(kf_data["keyframes"], float(distance_m) * 1000.0)
+    return {
+        "enabled": True,
+        "normalized": bool(kf_data.get("normalized", True)),
+        **box,
+    }
+
+
+def roi_override_for_angle_deg(
+    kf_data: Dict[str, Any],
+    angle_deg: float,
+) -> Dict[str, Any]:
+    """按转台角度返回可直接用于激光提取的 image_roi。"""
+    if kf_data.get("parameter_key") != "angle_deg":
+        raise ValueError("keyframe ROI file is not parameterized by angle_deg")
+    box = interpolate_roi_box(kf_data["keyframes"], float(angle_deg))
+    return {
+        "enabled": True,
+        "normalized": bool(kf_data.get("normalized", True)),
+        **box,
+    }
+
+
+def roi_override_for_frame_index(
+    kf_data: Dict[str, Any],
+    frame_index: float,
+) -> Dict[str, Any]:
+    """按扫描帧序号返回可直接用于激光提取的 image_roi。
+
+    ``frame_index`` 对应扫描目录排序后的图片下标（从 0 开始），
+    用于无导轨行程/转台角度的机械臂或手持扫描。
+    """
+    if kf_data.get("parameter_key") != "frame_index":
+        raise ValueError("keyframe ROI file is not parameterized by frame_index")
+    box = interpolate_roi_box(kf_data["keyframes"], float(frame_index))
     return {
         "enabled": True,
         "normalized": bool(kf_data.get("normalized", True)),
@@ -153,16 +217,34 @@ def save_keyframe_roi_file(
     keyframes: Sequence[Dict[str, Any]],
     normalized: bool = True,
 ) -> None:
+    if all("angle_deg" in frame for frame in keyframes):
+        parameter_key = "angle_deg"
+    elif all("frame_index" in frame for frame in keyframes):
+        parameter_key = "frame_index"
+    elif all("distance_mm" in frame for frame in keyframes):
+        parameter_key = "distance_mm"
+    else:
+        raise ValueError(
+            "keyframes must all contain the same parameter: "
+            "distance_mm, angle_deg or frame_index"
+        )
+    sorted_frames = sorted(
+        keyframes, key=lambda item: float(item[parameter_key]))
     payload = {
         "version": 1,
         "normalized": bool(normalized),
+        "parameter_key": parameter_key,
         "keyframes": [
             {
                 "image": str(fr["image"]),
-                "distance_mm": float(fr["distance_mm"]),
+                parameter_key: (
+                    int(fr[parameter_key])
+                    if parameter_key == "frame_index"
+                    else float(fr[parameter_key])
+                ),
                 "roi": {k: float(fr["roi"][k]) for k in ROI_KEYS},
             }
-            for fr in sorted(keyframes, key=lambda x: float(x["distance_mm"]))
+            for fr in sorted_frames
         ],
     }
     os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)

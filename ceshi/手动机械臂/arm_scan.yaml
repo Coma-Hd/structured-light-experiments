@@ -1,0 +1,148 @@
+# 机械臂末端手持扫描：相机 + 线激光固连在法兰上，物体与 ChArUco 板固定。
+# 位姿不依赖导轨行程或转台角度，每帧用板上可见角点做 PnP，再融合到板坐标系。
+# 相机、激光中心算法、曝光或增益改变后，必须重新标定激光平面。
+pose_source: "charuco"
+
+charuco:
+  squares_x: 14
+  squares_y: 9
+  square_length: 0.020
+  marker_length: 0.015
+  dictionary: "DICT_5X5_100"
+
+# 手持/机械臂模式必须用逐帧位姿，不能用 rail_fit（rail_fit 需要 positions.csv）。
+charuco_tracking:
+  mode: "per_frame"
+
+laser:
+  method: "steger"
+  score_mode: "blue_guided_intensity"
+  blue_gate_threshold: 5
+  blue_gate_expand_px: 5
+  score_threshold: 14
+  min_intensity: 16
+  scan_axis: "row"
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+  quality_filter:
+    enabled: true
+    width_level: 0.5
+    min_width_px: 1
+    max_width_px: 90
+    saturation_threshold: 250
+    max_saturated_width_px: 20
+    max_secondary_peak_ratio: 0.95
+    secondary_exclusion_px: 12
+    continuity_window: 5
+    max_continuity_deviation_px: 4.0
+  dominant_track_filter:
+    enabled: true
+    max_order_gap_px: 3.0
+    max_center_jump_px: 8.0
+    min_anchor_points: 10
+    polynomial_order: 2
+    max_residual_px: 4.0
+    min_secondary_segment_points: 4
+    max_secondary_segment_offset_px: 20.0
+  # 静态整幅 ROI 默认关闭；正式扫描用下方按帧序号插值的关键帧 ROI。
+  image_roi:
+    enabled: false
+    normalized: true
+    x_min: 0.0
+    x_max: 1.0
+    y_min: 0.0
+    y_max: 1.0
+  keyframe_roi:
+    # 无导轨/转台编码器时，按扫描排序后的 frame_index 在关键帧之间插值 ROI。
+    enabled: true
+    path: "ceshi/上机械臂/work/roi_keyframes.json"
+  # ROI 启用后：只有框内已经出现足够强、足够长的激光线才抓中心。
+  # 激光尚未扫入 ROI 时，框内弱蓝噪声也会过低阈值；因此峰值门限要明显高于 score_threshold。
+  roi_laser_gate:
+    enabled: true
+    # 对本相机：噪声峰值约 <90，真激光核约 200+；100 可挡“线未进 ROI”。
+    min_peak_score: 100
+    # 至少多少条扫描线命中；竖线激光 + scan_axis=row 时即至少这么多行有峰值。
+    min_hit_lines: 20
+  object_mask:
+    enabled: false
+    manifest: "ceshi/上机械臂/work/object_masks/manifest.json"
+    dilate_px: 3
+    grabcut_iterations: 5
+    tracking_grabcut_iterations: 0
+    morphology_px: 7
+    smoothing_px: 9
+    correction_brush_px: 8
+    min_tracking_inlier_ratio: 0.25
+    min_tracking_inlier_count: 20
+    max_area_change_ratio: 0.35
+
+plane_fit:
+  ransac: true
+  ransac_threshold: 0.0015
+  ransac_iters: 1000
+  min_inlier_ratio: 0.65
+  frame_consensus:
+    enabled: true
+    min_point_inlier_ratio: 0.50
+    max_median_factor: 1.50
+    min_good_frames: 8
+    min_good_frame_ratio: 0.50
+
+laser_calibration:
+  charuco_detection_channel: "green"
+  laser_min_score: 40
+  stripe_max_dist_px: 2.5
+  charuco_laser_exclusion_px: 10
+  line_ransac_threshold: 0.001
+  min_line_inlier_ratio: 0.60
+  max_points_per_frame: 120
+
+gating:
+  # 手持姿态变化大，建议保留足够角点；过少时 PnP 易漂。
+  min_charuco_corners: 8
+  min_laser_points: 12
+  max_reproj_error: 2.0
+
+rail:
+  enabled: false
+
+turntable:
+  enabled: false
+
+roi:
+  enabled: false
+  mode: "manual"
+  x_min: -1.0
+  x_max: 1.0
+  y_min: -1.0
+  y_max: 1.0
+  z_min: -1.0
+  z_max: 2.0
+
+postprocess:
+  voxel_size: 0.0002
+  sor_neighbors: 20
+  sor_std_ratio: 2.5
+  normal_radius: 0.004
+  normal_max_nn: 40
+  height_map_res: 0.0005
+  mesh_method: "none"
+  poisson_depth: 9
+  surface_trim_k: 0
+  export_aligned: false
+  two_plane_cleanup:
+    enabled: false
+
+pipeline:
+  extract_largest_plane: false
+  finish_mesh: false
+
+paths:
+  intrinsic_images: "ceshi/上机械臂/data/calibration/intrinsic"
+  laser_images: "ceshi/上机械臂/data/calibration/laser_plane"
+  scan_images: "ceshi/上机械臂/data/scan"
+  output: "ceshi/上机械臂/output"
+  camera_intrinsic: "ceshi/上机械臂/calibration/camera_intrinsic.yaml"
+  laser_plane: "ceshi/上机械臂/calibration/laser_plane.yaml"

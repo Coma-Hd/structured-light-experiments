@@ -28,6 +28,8 @@ from src.config import load_config, resolve_path  # noqa: E402
 from src.io_utils import imread_color  # noqa: E402
 from src.keyframe_roi import pick_keyframe_indices, save_keyframe_roi_file  # noqa: E402
 from src.rail_poses import load_rail_positions, resolve_positions_path  # noqa: E402
+from src.turntable_poses import (load_turntable_angles,
+                                 resolve_angles_path)  # noqa: E402
 
 
 class RectDrawer:
@@ -148,15 +150,23 @@ def main():
     ap.add_argument("--config", default=None)
     ap.add_argument("--images", default=None, help="扫描图目录")
     ap.add_argument("--positions", default=None, help="positions.csv")
+    ap.add_argument("--angles", default=None, help="转台 angles.csv")
+    ap.add_argument(
+        "--parameter",
+        choices=["auto", "distance_mm", "angle_deg", "frame_index"],
+        default="auto",
+        help="ROI 插值参数；机械臂/手持用 frame_index",
+    )
     ap.add_argument("--out", default=None, help="输出 JSON")
     ap.add_argument("--n", type=int, default=5, help="关键帧数量 3～5 推荐")
     args = ap.parse_args()
 
     cfg = load_config(args.config) if args.config else load_config()
     scan_dir = args.images or resolve_path(cfg, cfg["paths"]["scan_images"])
-    pos_name = args.positions or (cfg.get("rail") or {}).get("positions_file", "positions.csv")
+    use_angles = args.angles is not None
+    pos_name = args.positions or (cfg.get("rail") or {}).get(
+        "positions_file", "positions.csv")
     if args.positions and os.path.isfile(args.positions):
-        # allow full path: use basename lookup via resolve
         pos_name = args.positions
 
     out_json = args.out
@@ -173,24 +183,68 @@ def main():
     if not paths:
         raise SystemExit(f"扫描目录无图片: {scan_dir}")
 
-    # positions path for distance map
-    if os.path.isfile(str(pos_name)):
-        dist_map = load_distance_mm_map(scan_dir, os.path.basename(pos_name))
-        # if user passed full path, prefer reading that file
-        dist_map = {}
-        with open(pos_name, "r", encoding="utf-8-sig", newline="") as f:
-            reader = csv.DictReader(f)
-            fields = {c.lower().strip(): c for c in (reader.fieldnames or [])}
-            img_col = fields.get("image") or fields.get("file") or fields.get("filename")
-            dist_col = fields.get("distance_mm") or fields.get("distance")
-            for row in reader:
-                dist_map[os.path.basename(str(row[img_col]).strip())] = float(row[dist_col])
+    parameter_mode = str(args.parameter).strip().lower()
+    if parameter_mode == "auto":
+        if use_angles:
+            parameter_mode = "angle_deg"
+        else:
+            has_positions = False
+            if args.positions and os.path.isfile(args.positions):
+                has_positions = True
+            else:
+                try:
+                    resolve_positions_path(scan_dir, str(pos_name))
+                    has_positions = True
+                except Exception:
+                    has_positions = False
+            parameter_mode = "distance_mm" if has_positions else "frame_index"
+
+    if parameter_mode == "angle_deg":
+        if not use_angles and args.angles is None:
+            angles_name = (cfg.get("turntable") or {}).get(
+                "angles_file", "angles.csv")
+            args.angles = angles_name
+        angle_path = resolve_angles_path(scan_dir, str(args.angles))
+        parameter_map = load_turntable_angles(angle_path)
+        parameter_key = "angle_deg"
+        parameter_label = "angle_deg"
+        value_suffix = "deg"
+    elif parameter_mode == "distance_mm":
+        if args.positions and os.path.isfile(args.positions):
+            dist_map = {}
+            with open(args.positions, "r", encoding="utf-8-sig", newline="") as f:
+                reader = csv.DictReader(f)
+                fields = {
+                    c.lower().strip(): c for c in (reader.fieldnames or [])
+                }
+                img_col = (
+                    fields.get("image")
+                    or fields.get("file")
+                    or fields.get("filename")
+                )
+                dist_col = fields.get("distance_mm") or fields.get("distance")
+                for row in reader:
+                    dist_map[os.path.basename(str(row[img_col]).strip())] = (
+                        float(row[dist_col])
+                    )
+            parameter_map = dist_map
+        else:
+            parameter_map = load_distance_mm_map(scan_dir, pos_name)
+        parameter_key = "distance_mm"
+        parameter_label = "distance_mm"
+        value_suffix = "mm"
     else:
-        dist_map = load_distance_mm_map(scan_dir, pos_name)
+        parameter_map = {
+            os.path.basename(p): float(i) for i, p in enumerate(paths)
+        }
+        parameter_key = "frame_index"
+        parameter_label = "frame_index"
+        value_suffix = ""
 
     n_keys = max(3, min(int(args.n), 5, len(paths)))
     indices = pick_keyframe_indices(len(paths), n_keys)
     print(f"扫描: {scan_dir}")
+    print(f"插值参数: {parameter_key}")
     print(f"关键帧数: {n_keys}  索引: {indices}")
     print(f"输出: {out_json}")
 
@@ -199,16 +253,27 @@ def main():
         for k, idx in enumerate(indices):
             path = paths[idx]
             name = os.path.basename(path)
-            if name not in dist_map:
-                print(f"警告: {name} 不在 positions.csv，跳过")
+            if name not in parameter_map:
+                print(f"警告: {name} 无对应插值参数，跳过")
                 continue
             img = imread_color(path)
             if img is None:
                 print(f"读图失败: {path}")
                 continue
             h, w = img.shape[:2]
-            title = f"keyframe {k+1}/{len(indices)}  {name}  s={dist_map[name]:.1f}mm"
-            print(f"\n[{k+1}/{len(indices)}] {name}  distance_mm={dist_map[name]}")
+            value = float(parameter_map[name])
+            if parameter_key == "frame_index":
+                value_txt = f"{int(value)}"
+            else:
+                value_txt = f"{value:.2f}{value_suffix}"
+            title = (
+                f"keyframe {k+1}/{len(indices)}  {name}  "
+                f"{parameter_label}={value_txt}"
+            )
+            print(
+                f"\n[{k+1}/{len(indices)}] {name}  "
+                f"{parameter_label}={value_txt}"
+            )
             drawer = RectDrawer(img, title)
             rect = drawer.run()
             if rect is None:
@@ -226,11 +291,15 @@ def main():
                 f"x[{roi['x_min']:.3f},{roi['x_max']:.3f}] "
                 f"y[{roi['y_min']:.3f},{roi['y_max']:.3f}]"
             )
-            keyframes.append({
+            keyframe = {
                 "image": name,
-                "distance_mm": float(dist_map[name]),
                 "roi": roi,
-            })
+            }
+            if parameter_key == "frame_index":
+                keyframe[parameter_key] = int(value)
+            else:
+                keyframe[parameter_key] = value
+            keyframes.append(keyframe)
     except KeyboardInterrupt:
         print("\n用户中止，保存已确认的关键帧…")
 

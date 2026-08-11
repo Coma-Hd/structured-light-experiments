@@ -1,0 +1,28 @@
+mode: fixed_board_rail_fit
+valid_detection_frames: 430
+inlier_pose_frames: 430
+total_frames: 430
+pose_span_mm: 85.814975
+axis_board:
+- 0.999290683728818
+- -0.03649606285205207
+- -0.009282607881967272
+motion_per_nominal_distance:
+- 0.9732851785534362
+- -0.03554629061176802
+- -0.009041037624937787
+actual_over_nominal_distance: 0.9739760356032309
+center_fit_rms_mm: 0.22644650747208567
+max_center_residual_mm: 0.573742142256725
+max_rotation_deviation_deg: 0.2059919732995614
+mean_corner_count: 145.51627906976745
+mean_reprojection_error_px: 0.9767547942675691
+min_corner_area_ratio: 0.155296875
+rejections:
+  no_position: 0
+  no_detection: 0
+  too_few_corners: 0
+  corners_too_clustered: 0
+  pose_failed: 0
+  reprojection_error: 0
+accepted: true

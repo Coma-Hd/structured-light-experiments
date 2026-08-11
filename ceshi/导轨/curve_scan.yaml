@@ -1,0 +1,172 @@
+# 单方向连续曲面扫描配置。
+# 相机、激光中心算法或其参数改变后，必须重新标定激光平面。
+pose_source: "charuco"
+
+charuco:
+  squares_x: 14
+  squares_y: 9
+  square_length: 0.020
+  marker_length: 0.015
+  dictionary: "DICT_5X5_100"
+
+charuco_tracking:
+  mode: "rail_fit"
+  min_pose_frames: 8
+  min_pose_span_m: 0.030
+  min_corner_area_ratio: 0.002
+  max_center_residual_m: 0.004
+  max_rotation_deviation_deg: 1.5
+
+laser:
+  method: "steger"
+  # 必须与本目录 calibration/laser_plane.yaml 的标定响应完全一致。
+  # 新相机把激光亮核拍成饱和白色：先用蓝色光晕定位邻域，再在邻域内
+  # 以亮度寻找白色核心，避免中心吸附到蓝色光晕的一侧。
+  score_mode: "blue_guided_intensity"
+  blue_gate_threshold: 5
+  blue_gate_expand_px: 5
+  score_threshold: 14
+  min_intensity: 16
+  scan_axis: "row"
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+  # 标定和正式扫描共用：保留窄、单峰、连续的激光中心。
+  quality_filter:
+    enabled: true
+    width_level: 0.5
+    min_width_px: 1
+    # blue_gated_intensity 在木材上会形成约 20～70 px 的弱蓝响应；
+    # 过小会把整段有效中心全部拒绝，中心仍由 Steger 亚像素脊线定位。
+    max_width_px: 90
+    saturation_threshold: 250
+    # 新相机白色亮核约有 10～18 px；继续使用 4 px 会删除主体激光。
+    max_saturated_width_px: 20
+    # 五关键帧插值 ROI 已排除大部分背景，允许接近主峰的材质散射肩峰。
+    max_secondary_peak_ratio: 0.95
+    secondary_exclusion_px: 12
+    continuity_window: 5
+    max_continuity_deviation_px: 4.0
+  # 在插值 ROI 内保留最长平滑激光轨迹，删除短小溢出分支。
+  dominant_track_filter:
+    enabled: true
+    max_order_gap_px: 3.0
+    max_center_jump_px: 8.0
+    min_anchor_points: 10
+    polynomial_order: 2
+    max_residual_px: 4.0
+    min_secondary_segment_points: 4
+    max_secondary_segment_offset_px: 20.0
+  image_roi:
+    enabled: false
+    normalized: true
+    x_min: 0.0
+    x_max: 1.0
+    y_min: 0.0
+    y_max: 1.0
+  keyframe_roi:
+    # 五张关键帧手动画框，按 positions.csv 的导轨位置逐帧插值。
+    enabled: true
+    path: "ceshi/曲面/work/roi_keyframes.json"
+  object_mask:
+    # 已停用动态物体掩码，旧 manifest 即使存在也不会参与提取。
+    enabled: false
+    manifest: "ceshi/曲面/work/object_masks/manifest.json"
+    # 掩码向外扩张，避免切掉轮廓附近的有效激光。
+    # 只留少量轮廓安全边距；8 px 会扩进标定板并保留板面激光。
+    dilate_px: 3
+    grabcut_iterations: 5
+    # 关闭逐帧 GrabCut，避免激光照亮的棋盘区域不断被吸入物体掩码；
+    # 参考帧确认后仅用光流传播轮廓。
+    tracking_grabcut_iterations: 0
+    # 去掉标定板窄粘连、平滑锯齿；参考帧仍可右键擦除、左键补回。
+    morphology_px: 7
+    smoothing_px: 9
+    correction_brush_px: 8
+    min_tracking_inlier_ratio: 0.25
+    # 低纹理物体的比例可能略低；只要 RANSAC 仍有至少 20 个绝对内点就放行。
+    min_tracking_inlier_count: 20
+    max_area_change_ratio: 0.35
+
+plane_fit:
+  ransac: true
+  # 新相机与较小三角测量夹角下，1 px 误差对应更大的三维偏差；
+  # 帧级共识和最终平面拟合统一使用 1.5 mm。
+  ransac_threshold: 0.0015
+  ransac_iters: 1000
+  min_inlier_ratio: 0.65
+  # 先按整帧激光交线找共识，再做点级 RANSAC；坏位姿不会靠大量点支配结果。
+  frame_consensus:
+    enabled: true
+    min_point_inlier_ratio: 0.50
+    max_median_factor: 1.50
+    min_good_frames: 8
+    # 至少 8 张且不少于全部有效标定帧的 50%，防止少数相似板姿态
+    # 被误拟合成接近某一张标定板自身的错误平面。
+    min_good_frame_ratio: 0.50
+
+laser_calibration:
+  # 蓝激光污染灰度边缘时，改用受影响较小的绿色通道检测标定板。
+  charuco_detection_channel: "green"
+  # 来自另一台电脑成功版本的标定专用二维强度门限和细条带约束。
+  laser_min_score: 40
+  stripe_max_dist_px: 2.5
+  # 激光覆盖标记角点时会拉偏共面 PnP；位姿估计自动排除蓝线附近角点。
+  charuco_laser_exclusion_px: 10
+  # 每帧“板平面 ∩ 激光平面”应为三维直线，先剔除偏离该线的局部中心。
+  line_ransac_threshold: 0.001
+  min_line_inlier_ratio: 0.60
+  # 每个板姿态等量贡献，避免可见激光更长的姿态支配平面拟合。
+  max_points_per_frame: 120
+
+gating:
+  min_charuco_corners: 6
+  min_laser_points: 12
+  max_reproj_error: 2.0
+
+rail:
+  enabled: true
+  axis: [-1.0, 0.0, 0.0]
+  distance_scale: 1.0
+  distance_unit: "mm"
+  s_ref: 0.0
+  positions_file: "positions.csv"
+
+# 首次曲面实验不做三维自动裁剪，避免削掉凸起、凹陷和边缘。
+# 物体、标定板与背景的分离由 keyframe ROI 完成。
+roi:
+  enabled: false
+  mode: "manual"
+  x_min: -1.0
+  x_max: 1.0
+  y_min: -1.0
+  y_max: 1.0
+  z_min: -1.0
+  z_max: 2.00
+
+postprocess:
+  voxel_size: 0.0002
+  sor_neighbors: 20
+  sor_std_ratio: 2.5
+  normal_radius: 0.004
+  normal_max_nn: 40
+  height_map_res: 0.0005
+  mesh_method: "none"
+  poisson_depth: 9
+  surface_trim_k: 0
+  export_aligned: false
+  # 自由曲面禁止启用 two_plane_cleanup。
+  two_plane_cleanup:
+    enabled: false
+
+pipeline:
+  extract_largest_plane: false
+  finish_mesh: false
+
+paths:
+  intrinsic_images: "ceshi/曲面/data/calibration/intrinsic"
+  laser_images: "ceshi/曲面/data/calibration/laser_plane"
+  scan_images: "ceshi/曲面/data/scan"
+  output: "ceshi/曲面/output"
+  camera_intrinsic: "ceshi/曲面/calibration/camera_intrinsic.yaml"
+  laser_plane: "ceshi/曲面/calibration/laser_plane.yaml"

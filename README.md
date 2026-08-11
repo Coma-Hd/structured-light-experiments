@@ -1,4 +1,4 @@
-# 线激光 3D 重建 · 代码与操作交接文档
+﻿# 线激光 3D 重建 · 代码与操作交接文档
 
 基于 **450nm 蓝色线激光器 + RGB 相机 + ChArUco 标定板** 的线结构光三维重建。
 
@@ -14,19 +14,30 @@ cd structured-light-experiments
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Action setup
 ```
 
-安装脚本会创建 `.venv`、安装 `requirements.txt`、下载 LFS 点云并检查主程序。之后先阅读 [`ceshi/曲面/README.md`](ceshi/曲面/README.md)，再按顺序运行：
+安装脚本会创建 `.venv`、安装 `requirements.txt`、下载 LFS 点云并检查主程序。之后先阅读 [`ceshi/导轨/导轨.md`](ceshi/导轨/导轨.md)，再按顺序运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\0_capture.ps1 -ClearOutput
-powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\1_draw_check.ps1
-powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\2_rebuild.ps1
+powershell -ExecutionPolicy Bypass -File .\ceshi\导轨\0_capture.ps1 -ClearOutput
+powershell -ExecutionPolicy Bypass -File .\ceshi\导轨\1_draw_check.ps1
+powershell -ExecutionPolicy Bypass -File .\ceshi\导轨\2_rebuild.ps1
 ```
 
 四面拼接流程位于 [`ceshi/rail/two_faces`](ceshi/rail/two_faces/)，完整采集、重建与拼接顺序见 [`拼接README.md`](ceshi/rail/two_faces/拼接README.md)。相关 PowerShell 脚本同样会自动使用 `.venv`，四面流程使用根目录 `output/` 中的专用标定文件。
 
-仅更换电脑且相机、镜头、激光、支架、分辨率、曝光和增益完全不变时，可以先验证现有标定。任何光机位置或成像参数变化，都必须按曲面文档重新标定。
+仅更换电脑且相机、镜头、激光、支架、分辨率、曝光和增益完全不变时，可以先验证现有标定。任何光机位置或成像参数变化，都必须按对应平台文档重新标定。
 
 ---
+
+
+## 实验三大类
+
+仓库实验区已整理为三类平台，详见 [ceshi/README.md](ceshi/README.md)：
+
+- **导轨**：`ceshi/导轨`
+- **转台**：`ceshi/转台`
+- **手动机械臂**：`ceshi/手动机械臂`
+
+过程文档：`ceshi/排错与优化文档`。`data/` 中的采集图片不纳入版本库。
 
 ## 目录
 
@@ -111,6 +122,17 @@ powershell -ExecutionPolicy Bypass -File .\ceshi\曲面\2_rebuild.ps1
 > 无论板怎么移动，每帧的点经过这一步都回到**同一个板坐标系**，于是自然对齐——这就是无导轨也能拼点云、也能多视角融合的原因。
 
 ---
+
+
+## 实验三大类
+
+仓库实验区已整理为三类平台，详见 [ceshi/README.md](ceshi/README.md)：
+
+- **导轨**：`ceshi/导轨`
+- **转台**：`ceshi/转台`
+- **手动机械臂**：`ceshi/手动机械臂`
+
+过程文档：`ceshi/排错与优化文档`。`data/` 中的采集图片不纳入版本库。
 
 ## 目录结构
 
@@ -414,3 +436,5 @@ python scripts/5_merge_views.py --views data/scan_v0 data/scan_v1 data/scan_v2 -
 | 激光平面 | 拟合 RMS ≈ 0.1–0.5mm |
 | 拼接 | 移动前后同一物体点对齐，无明显重影 |
 | 最终 | 已知物体尺寸误差在可接受范围 |
+
+

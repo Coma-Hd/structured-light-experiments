@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "title": "半球重建验证报告",
+  "generated_at": "2026-07-28T14:45:48+08:00",
+  "true_diameter_mm": 98.9,
+  "settings": {
+    "method": "ransac_initial_soft_l1_sphere_no_icp",
+    "inlier_threshold_mm": 2.5,
+    "pair_max_points": 50000,
+    "common_overlap_percentile": 2.0
+  },
+  "scans": [
+    {
+      "name": "5",
+      "cloud_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\5\\cloud.ply",
+      "tracking_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\5\\cloud_charuco_tracking.yaml",
+      "true_diameter_mm": 98.9,
+      "diameter_error_mm": -0.3517209713906482,
+      "diameter_error_percent": -0.35563293366091825,
+      "sphere": {
+        "center_m": [
+          0.14308454076484317,
+          0.05359984176623762,
+          0.003984030770580785
+        ],
+        "radius_m": 0.04927413951430468,
+        "diameter_mm": 98.54827902860936,
+        "point_count": 65808,
+        "fit_point_count": 50000,
+        "inlier_count": 65808,
+        "inlier_ratio": 1.0,
+        "inlier_threshold_mm": 2.5,
+        "residual_mean_mm": 0.00476089981855879,
+        "residual_median_abs_mm": 0.30458122206153404,
+        "residual_rms_mm": 0.4390309891306184,
+        "residual_p95_abs_mm": 0.8176622849281064,
+        "fraction_abs_lt_0_5mm": 0.7429035983467056,
+        "fraction_abs_lt_1_0mm": 0.9807318259178215,
+        "bbox_span_mm": [
+          86.26,
+          68.23000000000002,
+          52.471
+        ]
+      },
+      "tracking": {
+        "mode": "fixed_board_rail_fit",
+        "valid_detection_frames": 416,
+        "inlier_pose_frames": 416,
+        "total_frames": 418,
+        "pose_span_mm": 83.414028,
+        "axis_board": [
+          -0.9859912995273125,
+          -0.1635343188761133,
+          -0.032828094769073383
+        ],
+        "motion_per_nominal_distance": [
+          -0.9634840651170916,
+          -0.15980131915205384,
+          -0.03207872748301042
+        ],
+        "actual_over_nominal_distance": 0.977172988827578,
+        "center_fit_rms_mm": 0.6129953420326337,
+        "max_center_residual_mm": 2.2210202607630873,
+        "max_rotation_deviation_deg": 0.37343429599514055,
+        "mean_corner_count": 116.22115384615384,
+        "mean_reprojection_error_px": 1.8034661210056109,
+        "min_corner_area_ratio": 0.15552291666666668,
+        "rejections": {
+          "no_position": 0,
+          "no_detection": 0,
+          "too_few_corners": 0,
+          "corners_too_clustered": 0,
+          "pose_failed": 0,
+          "reprojection_error": 2
+        },
+        "accepted": true
+      }
+    },
+    {
+      "name": "6",
+      "cloud_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\6\\cloud.ply",
+      "tracking_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\6\\cloud_charuco_tracking.yaml",
+      "true_diameter_mm": 98.9,
+      "diameter_error_mm": -0.2293949426974109,
+      "diameter_error_percent": -0.23194635257574406,
+      "sphere": {
+        "center_m": [
+          0.14298396509267328,
+          0.05359027425089802,
+          0.003952481313516865
+        ],
+        "radius_m": 0.049335302528651294,
+        "diameter_mm": 98.6706050573026,
+        "point_count": 65504,
+        "fit_point_count": 50000,
+        "inlier_count": 65500,
+        "inlier_ratio": 0.9999389350268686,
+        "inlier_threshold_mm": 2.5,
+        "residual_mean_mm": 0.0034498156023561356,
+        "residual_median_abs_mm": 0.2970779377523339,
+        "residual_rms_mm": 0.4237963179646103,
+        "residual_p95_abs_mm": 0.7956329464754098,
+        "fraction_abs_lt_0_5mm": 0.7550687022900764,
+        "fraction_abs_lt_1_0mm": 0.9855725190839695,
+        "bbox_span_mm": [
+          84.989,
+          66.84599999999999,
+          56.173
+        ]
+      },
+      "tracking": {
+        "mode": "fixed_board_rail_fit",
+        "valid_detection_frames": 411,
+        "inlier_pose_frames": 411,
+        "total_frames": 411,
+        "pose_span_mm": 82.017205,
+        "axis_board": [
+          -0.9857072248890466,
+          -0.16501000375597433,
+          -0.03395534511660792
+        ],
+        "motion_per_nominal_distance": [
+          -0.9626256499457598,
+          -0.16114608689312057,
+          -0.033160237986169294
+        ],
+        "actual_over_nominal_distance": 0.9765837417435133,
+        "center_fit_rms_mm": 0.61125276471373,
+        "max_center_residual_mm": 1.2978618930154586,
+        "max_rotation_deviation_deg": 0.3367419841310638,
+        "mean_corner_count": 117.68369829683698,
+        "mean_reprojection_error_px": 1.7354577530779773,
+        "min_corner_area_ratio": 0.175115625,
+        "rejections": {
+          "no_position": 0,
+          "no_detection": 0,
+          "too_few_corners": 0,
+          "corners_too_clustered": 0,
+          "pose_failed": 0,
+          "reprojection_error": 0
+        },
+        "accepted": true
+      }
+    },
+    {
+      "name": "7",
+      "cloud_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\7\\cloud.ply",
+      "tracking_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\7\\cloud_charuco_tracking.yaml",
+      "true_diameter_mm": 98.9,
+      "diameter_error_mm": -0.21767807059485733,
+      "diameter_error_percent": -0.22009916136992652,
+      "sphere": {
+        "center_m": [
+          0.14303312730975482,
+          0.053565247832194324,
+          0.00398078641978217
+        ],
+        "radius_m": 0.04934116096470258,
+        "diameter_mm": 98.68232192940515,
+        "point_count": 66140,
+        "fit_point_count": 50000,
+        "inlier_count": 66134,
+        "inlier_ratio": 0.9999092833383731,
+        "inlier_threshold_mm": 2.5,
+        "residual_mean_mm": 0.00014074832017647596,
+        "residual_median_abs_mm": 0.2956785697478606,
+        "residual_rms_mm": 0.42097466260251165,
+        "residual_p95_abs_mm": 0.777934713809885,
+        "fraction_abs_lt_0_5mm": 0.7614086551546859,
+        "fraction_abs_lt_1_0mm": 0.9862400580639308,
+        "bbox_span_mm": [
+          86.44099999999999,
+          65.39399999999999,
+          54.263000000000005
+        ]
+      },
+      "tracking": {
+        "mode": "fixed_board_rail_fit",
+        "valid_detection_frames": 417,
+        "inlier_pose_frames": 417,
+        "total_frames": 417,
+        "pose_span_mm": 83.231497,
+        "axis_board": [
+          -0.98580969447744,
+          -0.16455336424599912,
+          -0.03318789824046969
+        ],
+        "motion_per_nominal_distance": [
+          -0.9630692786612611,
+          -0.16075748767076545,
+          -0.03242232795821215
+        ],
+        "actual_over_nominal_distance": 0.9769322457026219,
+        "center_fit_rms_mm": 0.6004171340657212,
+        "max_center_residual_mm": 1.6179850815084245,
+        "max_rotation_deviation_deg": 0.3851482699386534,
+        "mean_corner_count": 117.33333333333333,
+        "mean_reprojection_error_px": 1.7951156084340825,
+        "min_corner_area_ratio": 0.15474270833333334,
+        "rejections": {
+          "no_position": 0,
+          "no_detection": 0,
+          "too_few_corners": 0,
+          "corners_too_clustered": 0,
+          "pose_failed": 0,
+          "reprojection_error": 0
+        },
+        "accepted": true
+      }
+    },
+    {
+      "name": "8",
+      "cloud_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\8\\cloud.ply",
+      "tracking_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\output\\7.28下午测试\\8\\cloud_charuco_tracking.yaml",
+      "true_diameter_mm": 98.9,
+      "diameter_error_mm": -0.19833370710648524,
+      "diameter_error_percent": -0.20053964318148151,
+      "sphere": {
+        "center_m": [
+          0.1428619382544663,
+          0.05349649162346324,
+          0.003973941852046136
+        ],
+        "radius_m": 0.04935083314644676,
+        "diameter_mm": 98.70166629289352,
+        "point_count": 65440,
+        "fit_point_count": 50000,
+        "inlier_count": 65438,
+        "inlier_ratio": 0.9999694376528118,
+        "inlier_threshold_mm": 2.5,
+        "residual_mean_mm": 0.0021497953906303158,
+        "residual_median_abs_mm": 0.3022401341189578,
+        "residual_rms_mm": 0.4259668206231334,
+        "residual_p95_abs_mm": 0.7834566756933439,
+        "fraction_abs_lt_0_5mm": 0.7472569455056695,
+        "fraction_abs_lt_1_0mm": 0.9861089886610227,
+        "bbox_span_mm": [
+          86.28300000000002,
+          65.32199999999999,
+          52.324
+        ]
+      },
+      "tracking": {
+        "mode": "fixed_board_rail_fit",
+        "valid_detection_frames": 412,
+        "inlier_pose_frames": 412,
+        "total_frames": 416,
+        "pose_span_mm": 83.02341700000001,
+        "axis_board": [
+          -0.9854134288901844,
+          -0.16601575324761386,
+          -0.0374051311522461
+        ],
+        "motion_per_nominal_distance": [
+          -0.9633467875436793,
+          -0.1622981155765798,
+          -0.036567507481351735
+        ],
+        "actual_over_nominal_distance": 0.9776067174451261,
+        "center_fit_rms_mm": 0.6511460168093371,
+        "max_center_residual_mm": 1.4520728688996298,
+        "max_rotation_deviation_deg": 0.3904215265214241,
+        "mean_corner_count": 119.00970873786407,
+        "mean_reprojection_error_px": 1.7981362466132589,
+        "min_corner_area_ratio": 0.17043958333333334,
+        "rejections": {
+          "no_position": 0,
+          "no_detection": 0,
+          "too_few_corners": 0,
+          "corners_too_clustered": 0,
+          "pose_failed": 0,
+          "reprojection_error": 4
+        },
+        "accepted": true
+      }
+    }
+  ],
+  "calibration": {
+    "intrinsic_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\calibration\\camera_intrinsic.yaml",
+    "intrinsic": {
+      "image_width": 800,
+      "image_height": 600,
+      "reproj_error_px": 0.9841010573989296,
+      "K": {
+        "fx": 690.1983127807912,
+        "fy": 695.9713619011812,
+        "cx": 616.7472785091461,
+        "cy": 387.4107390328036
+      },
+      "camera_matrix": [
+        [
+          690.1983127807912,
+          0.0,
+          616.7472785091461
+        ],
+        [
+          0.0,
+          695.9713619011812,
+          387.4107390328036
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dist_coeffs": [
+        -0.02564804534200359,
+        -0.0036374374249638964,
+        -0.0006171052412472394,
+        -0.0057790450548915314,
+        -0.008760260137628961
+      ]
+    },
+    "laser_plane_path": "C:\\Users\\Administrator\\Desktop\\Sturctured light pipeline\\ceshi\\ceshi\\曲面\\calibration\\laser_plane.yaml",
+    "laser_plane": {
+      "plane_abcd": [
+        0.9681123643974157,
+        0.0439237549901034,
+        -0.24663566985822347,
+        0.07087108547895488
+      ],
+      "normal": [
+        0.9681123643974157,
+        0.0439237549901034,
+        -0.24663566985822347
+      ],
+      "d": 0.07087108547895488,
+      "fit_rms_m": 0.0006862698058295744,
+      "num_points": 615,
+      "frame": "camera"
+    }
+  },
+  "repeatability": {
+    "scan_count": 4,
+    "mean_diameter_mm": 98.65071807705266,
+    "diameter_std_mm": 0.06948327091301752,
+    "diameter_range_mm": 0.15338726428416294,
+    "mean_bias_mm": -0.24928192294734686,
+    "mean_bias_percent": -0.252054522697014,
+    "pairwise": [
+      {
+        "first": "5",
+        "second": "6",
+        "diameter_difference_mm": 0.12232602869323728,
+        "center_distance_mm": 0.10584125577121498,
+        "median_mm": 0.17315744275438708,
+        "rms_mm": 0.3070043919555549,
+        "p95_mm": 0.4644004198831121
+      },
+      {
+        "first": "5",
+        "second": "7",
+        "diameter_difference_mm": 0.13404290079579084,
+        "center_distance_mm": 0.06205327911415015,
+        "median_mm": 0.17202616080120436,
+        "rms_mm": 0.31070207564482094,
+        "p95_mm": 0.49363483466791236
+      },
+      {
+        "first": "5",
+        "second": "8",
+        "diameter_difference_mm": 0.15338726428416294,
+        "center_distance_mm": 0.24563166716603688,
+        "median_mm": 0.2315264563489579,
+        "rms_mm": 0.3250323381296083,
+        "p95_mm": 0.5164864951485257
+      },
+      {
+        "first": "6",
+        "second": "7",
+        "diameter_difference_mm": 0.011716872102553566,
+        "center_distance_mm": 0.06200342137491404,
+        "median_mm": 0.11624112837542344,
+        "rms_mm": 0.40025169586149156,
+        "p95_mm": 0.46063754729700634
+      },
+      {
+        "first": "6",
+        "second": "8",
+        "diameter_difference_mm": 0.031061235590925662,
+        "center_distance_mm": 0.15539074993489027,
+        "median_mm": 0.18343800042014496,
+        "rms_mm": 0.3746674389108292,
+        "p95_mm": 0.4737826505898917
+      },
+      {
+        "first": "7",
+        "second": "8",
+        "diameter_difference_mm": 0.019344363488372096,
+        "center_distance_mm": 0.18460757567645703,
+        "median_mm": 0.17111545809150414,
+        "rms_mm": 0.27854055221816443,
+        "p95_mm": 0.43630814776304516
+      }
+    ]
+  },
+  "common_overlap": {
+    "method": "shared_board_frame_axis_aligned_percentile_box",
+    "percentile": 2.0,
+    "lower_bound_m": [
+      0.10976512000000001,
+      0.00483642,
+      -0.044709
+    ],
+    "upper_bound_m": [
+      0.183514,
+      0.057394440000000005,
+      0.002398100000000006
+    ],
+    "scans": [
+      {
+        "name": "5",
+        "sphere": {
+          "center_m": [
+            0.14309783455291203,
+            0.05364022800805213,
+            0.0039165813683204945
+          ],
+          "radius_m": 0.04924811729568458,
+          "diameter_mm": 98.49623459136916,
+          "point_count": 56923,
+          "fit_point_count": 50000,
+          "inlier_count": 56923,
+          "inlier_ratio": 1.0,
+          "inlier_threshold_mm": 2.5,
+          "residual_mean_mm": 0.0007013339973037084,
+          "residual_median_abs_mm": 0.3034814660342819,
+          "residual_rms_mm": 0.4205422739523725,
+          "residual_p95_abs_mm": 0.7799896685296626,
+          "fraction_abs_lt_0_5mm": 0.7467104685276602,
+          "fraction_abs_lt_1_0mm": 0.9898107970416177,
+          "bbox_span_mm": [
+            73.748,
+            52.54599999999999,
+            47.104
+          ]
+        },
+        "diameter_error_mm": -0.4037654086308464,
+        "diameter_error_percent": -0.40825622712926835,
+        "retained_point_ratio": 0.8649860199367858
+      },
+      {
+        "name": "6",
+        "sphere": {
+          "center_m": [
+            0.14298862155307754,
+            0.053587505012484785,
+            0.00381924917827798
+          ],
+          "radius_m": 0.04924576500564555,
+          "diameter_mm": 98.4915300112911,
+          "point_count": 56877,
+          "fit_point_count": 50000,
+          "inlier_count": 56877,
+          "inlier_ratio": 1.0,
+          "inlier_threshold_mm": 2.5,
+          "residual_mean_mm": 0.0007014982163275626,
+          "residual_median_abs_mm": 0.2962638644551374,
+          "residual_rms_mm": 0.40907949634754276,
+          "residual_p95_abs_mm": 0.7612799214756161,
+          "fraction_abs_lt_0_5mm": 0.7628566907537317,
+          "fraction_abs_lt_1_0mm": 0.9902948467746189,
+          "bbox_span_mm": [
+            73.74600000000001,
+            52.557,
+            47.105999999999995
+          ]
+        },
+        "diameter_error_mm": -0.4084699887089016,
+        "diameter_error_percent": -0.41301313317381355,
+        "retained_point_ratio": 0.8682981191988276
+      },
+      {
+        "name": "7",
+        "sphere": {
+          "center_m": [
+            0.14301493771304877,
+            0.05359703775187944,
+            0.003927424528806032
+          ],
+          "radius_m": 0.049322935634422665,
+          "diameter_mm": 98.64587126884533,
+          "point_count": 56901,
+          "fit_point_count": 50000,
+          "inlier_count": 56901,
+          "inlier_ratio": 1.0,
+          "inlier_threshold_mm": 2.5,
+          "residual_mean_mm": -0.0017485627208426377,
+          "residual_median_abs_mm": 0.2989647514969329,
+          "residual_rms_mm": 0.4095270483510539,
+          "residual_p95_abs_mm": 0.7578881604430945,
+          "fraction_abs_lt_0_5mm": 0.7610586808667686,
+          "fraction_abs_lt_1_0mm": 0.991142510676438,
+          "bbox_span_mm": [
+            73.74600000000001,
+            52.557,
+            47.104
+          ]
+        },
+        "diameter_error_mm": -0.2541287311546796,
+        "diameter_error_percent": -0.2569552387812736,
+        "retained_point_ratio": 0.8603114605382521
+      },
+      {
+        "name": "8",
+        "sphere": {
+          "center_m": [
+            0.1428450720214176,
+            0.05353831989185492,
+            0.003948233947725512
+          ],
+          "radius_m": 0.049356636700642005,
+          "diameter_mm": 98.71327340128401,
+          "point_count": 56676,
+          "fit_point_count": 50000,
+          "inlier_count": 56676,
+          "inlier_ratio": 1.0,
+          "inlier_threshold_mm": 2.5,
+          "residual_mean_mm": -0.001269819827407528,
+          "residual_median_abs_mm": 0.3034895720136592,
+          "residual_rms_mm": 0.41434474953058714,
+          "residual_p95_abs_mm": 0.7617697494192496,
+          "fraction_abs_lt_0_5mm": 0.7505822570400169,
+          "fraction_abs_lt_1_0mm": 0.9908956171924624,
+          "bbox_span_mm": [
+            73.74700000000001,
+            52.55,
+            47.105
+          ]
+        },
+        "diameter_error_mm": -0.1867265987159925,
+        "diameter_error_percent": -0.18880343651768705,
+        "retained_point_ratio": 0.8660757946210269
+      }
+    ],
+    "repeatability": {
+      "scan_count": 4,
+      "mean_diameter_mm": 98.5867273181974,
+      "diameter_std_mm": 0.11069986283314358,
+      "diameter_range_mm": 0.2217433899929091,
+      "mean_bias_mm": -0.3132726818026015,
+      "mean_bias_percent": -0.31675700890050706,
+      "pairwise": [
+        {
+          "first": "5",
+          "second": "6",
+          "diameter_difference_mm": 0.004704580078055187,
+          "center_distance_mm": 0.15550160389177514,
+          "median_mm": 0.15525140897792045,
+          "rms_mm": 0.21788840503799187,
+          "p95_mm": 0.39316580471378243
+        },
+        {
+          "first": "5",
+          "second": "7",
+          "diameter_difference_mm": 0.14963667747616682,
+          "center_distance_mm": 0.09410025726262661,
+          "median_mm": 0.1544862453424321,
+          "rms_mm": 0.22269398175523292,
+          "p95_mm": 0.3985435986187694
+        },
+        {
+          "first": "5",
+          "second": "8",
+          "diameter_difference_mm": 0.21703880991485391,
+          "center_distance_mm": 0.2743648068855102,
+          "median_mm": 0.20455072720477271,
+          "rms_mm": 0.2681374608666234,
+          "p95_mm": 0.4621963868253852
+        },
+        {
+          "first": "6",
+          "second": "7",
+          "diameter_difference_mm": 0.154341257554222,
+          "center_distance_mm": 0.11173772799670047,
+          "median_mm": 0.08593602271457478,
+          "rms_mm": 0.17041724390448287,
+          "p95_mm": 0.3538343538700807
+        },
+        {
+          "first": "6",
+          "second": "8",
+          "diameter_difference_mm": 0.2217433899929091,
+          "center_distance_mm": 0.19915500214805879,
+          "median_mm": 0.1651302515919742,
+          "rms_mm": 0.21523037297277536,
+          "p95_mm": 0.3866928367530345
+        },
+        {
+          "first": "7",
+          "second": "8",
+          "diameter_difference_mm": 0.06740213243868709,
+          "center_distance_mm": 0.18092863840464402,
+          "median_mm": 0.14571890748972466,
+          "rms_mm": 0.18922697896970186,
+          "p95_mm": 0.34066002113168753
+        }
+      ]
+    }
+  }
+}

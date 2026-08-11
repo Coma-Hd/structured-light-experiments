@@ -1,0 +1,44 @@
+{
+  "created_at": "2026-07-29T17:33:07",
+  "motion": "encoder_synchronized_turntable",
+  "angle_source": "VCE2755 actual_mdeg linear interpolation",
+  "motor_port": "COM10",
+  "target_angular_velocity_deg_s": 1.0,
+  "encoder_direction_multiplier": 1,
+  "requested_step_deg": 2.0,
+  "start_deg": 0.0,
+  "saved_images": 44,
+  "recorded_span_deg": 90.12171053456998,
+  "elapsed_s": 93.91592729999684,
+  "actual_increment_deg": {
+    "min": 2.001708521754317,
+    "max": 2.456736410294294,
+    "mean": 2.095853733362093
+  },
+  "measured_speed_deg_s": {
+    "min": 0.7264405114416894,
+    "max": 1.168006005198157,
+    "mean": 0.9707836418452969
+  },
+  "encoder_telemetry": {
+    "sample_count": 698,
+    "mean_interval_s": 0.13831421563849775,
+    "min_interval_s": 0.12696399999549612,
+    "max_interval_s": 0.27000379998935387,
+    "mean_rate_hz": 7.229914838353496
+  },
+  "interpolation_bracket_span_s": {
+    "min": 0.13187909999396652,
+    "max": 0.1520128000411205,
+    "mean": 0.13821972045777578
+  },
+  "camera_settings": {
+    "exposure": -6.0,
+    "gain": 7.0,
+    "brightness": null,
+    "warmup_frames": 5
+  },
+  "stopped_by": "keyboard",
+  "angle_formula": "angle_deg = start_deg + (interpolated_actual_mdeg - first_frame_actual_mdeg) / 1000",
+  "warning": "编码器回复时间用于同步；串口时延和相机曝光时刻仍会形成同步误差。"
+}

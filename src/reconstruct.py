@@ -1,8 +1,9 @@
 """逐帧重建与融合（阶段 8）。
 
-支持两种位姿来源：
+支持三种位姿来源：
   - charuco: 每帧检测标定板，变到板坐标系（旧流程，扫描时需要板）
   - rail:    导轨纯平移，姿态固定；扫描无板，用 positions.csv 行程拼点云
+  - turntable: 相机固定、物体绕已标定转轴旋转；用 angles.csv 反转融合
 
 rail 模式：
   1. 提取蓝激光中心线
@@ -27,9 +28,18 @@ from .geometry import (pixels_to_rays, ray_plane_intersect_masked,
                        scale_intrinsic, transform_cam_by_rail_translation,
                        transform_cam_to_board)
 from .io_utils import imread_color, load_intrinsic, load_intrinsic_size, load_laser_plane
-from .keyframe_roi import load_keyframe_roi_from_cfg, roi_override_for_distance_m
+from .keyframe_roi import (load_keyframe_roi_from_cfg,
+                           roi_override_for_angle_deg,
+                           roi_override_for_distance_m,
+                           roi_override_for_frame_index)
 from .laser_center import extract_laser_centers
+from .object_mask import (load_object_mask_for_image,
+                          load_object_mask_manifest,
+                          resolve_object_mask_manifest)
 from .rail_poses import load_rail_positions, lookup_distance, resolve_positions_path
+from .turntable_poses import (load_turntable_angles, load_turntable_axis,
+                              lookup_angle, resolve_angles_path,
+                              transform_cam_by_turntable_rotation)
 
 
 def _normalize_axis(axis) -> np.ndarray:
@@ -60,16 +70,20 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
 
     pose_source:
       - None: 读 cfg['pose_source']，再否则若 rail.enabled 则 rail，否则 charuco
-      - 'charuco' | 'rail'
-    positions_file: 覆盖 cfg['rail']['positions_file']（rail 或 ChArUco rail_fit）
+      - 'charuco' | 'rail' | 'turntable'
+    positions_file: 覆盖 rail 的 positions.csv 或 turntable 的 angles.csv
     """
     rail_cfg = cfg.get("rail", {}) or {}
+    turntable_cfg = cfg.get("turntable", {}) or {}
     if pose_source is None:
         pose_source = cfg.get("pose_source")
     if pose_source is None:
-        pose_source = "rail" if bool(rail_cfg.get("enabled", False)) else "charuco"
+        if bool(turntable_cfg.get("enabled", False)):
+            pose_source = "turntable"
+        else:
+            pose_source = "rail" if bool(rail_cfg.get("enabled", False)) else "charuco"
     pose_source = str(pose_source).strip().lower()
-    if pose_source not in ("charuco", "rail"):
+    if pose_source not in ("charuco", "rail", "turntable"):
         raise ValueError(f"unsupported pose_source: {pose_source}")
 
     K, dist = load_intrinsic(intrinsic_path)
@@ -106,8 +120,13 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
     axis = None
     distance_scale = 1.0
     s_ref_m = 0.0
+    turntable_angles = None
+    turntable_axis_point = None
+    turntable_axis_direction = None
+    turntable_reference_angle = None
+    turntable_angle_scale = 1.0
     needs_positions = (
-        positions_file is not None
+        (positions_file is not None and pose_source != "turntable")
         or pose_source == "rail"
         or (
             pose_source == "charuco"
@@ -132,7 +151,53 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
                   f"frames_in_csv={len(positions)}")
     else:
         if verbose:
-            print("[重建] pose_source=charuco")
+            print(f"[重建] pose_source={pose_source}")
+
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if pose_source == "turntable":
+        angles_name = positions_file or turntable_cfg.get(
+            "angles_file", "angles.csv")
+        angles_path = resolve_angles_path(image_dir, str(angles_name))
+        turntable_angles = load_turntable_angles(angles_path)
+        axis_calibration = turntable_cfg.get("axis_calibration")
+        if not axis_calibration:
+            raise ValueError(
+                "turntable.axis_calibration is required for turntable reconstruction")
+        axis_path = str(axis_calibration)
+        if not os.path.isabs(axis_path):
+            axis_path = os.path.join(project_root, axis_path)
+        (
+            turntable_axis_point,
+            turntable_axis_direction,
+            _,
+        ) = load_turntable_axis(axis_path)
+        turntable_angle_scale = float(
+            turntable_cfg.get("angle_scale", 1.0))
+        if not np.isfinite(turntable_angle_scale) or turntable_angle_scale == 0.0:
+            raise ValueError("turntable.angle_scale must be finite and non-zero")
+        reference_setting = turntable_cfg.get("reference_angle_deg", "first")
+        if isinstance(reference_setting, str) and (
+            reference_setting.strip().lower() == "first"
+        ):
+            for path in files:
+                raw_angle = lookup_angle(turntable_angles, path)
+                if raw_angle is not None:
+                    turntable_reference_angle = (
+                        float(raw_angle) * turntable_angle_scale)
+                    break
+        else:
+            turntable_reference_angle = (
+                float(reference_setting) * turntable_angle_scale)
+        if turntable_reference_angle is None:
+            raise RuntimeError("angles.csv 中没有任何扫描图片对应的角度")
+        if verbose:
+            print(
+                f"[重建] angles={angles_path}  axis={axis_path}  "
+                f"reference={turntable_reference_angle:.6f}°  "
+                f"angle_scale={turntable_angle_scale:.9f}")
+            print(
+                f"[重建] axis_point_m={turntable_axis_point.tolist()}  "
+                f"axis_direction={turntable_axis_direction.tolist()}")
 
     target = None
     fitted_charuco_poses = None
@@ -156,7 +221,6 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
             charuco_tracking_report = tracking_result["report"]
 
     # Optional: per-frame image ROI interpolated from keyframe boxes.
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     kf_roi = None
     try:
         kf_roi = load_keyframe_roi_from_cfg(cfg, project_root=project_root)
@@ -171,9 +235,26 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
             f"(static laser.image_roi ignored when override is used)"
         )
 
+    object_mask_manifest = None
+    object_mask_path = resolve_object_mask_manifest(
+        cfg, project_root=project_root)
+    if object_mask_path is not None:
+        if not os.path.isfile(object_mask_path):
+            raise FileNotFoundError(
+                f"laser.object_mask.enabled 但找不到清单: "
+                f"{object_mask_path}")
+        object_mask_manifest = load_object_mask_manifest(object_mask_path)
+        if verbose:
+            print(
+                f"[重建] object_mask: {object_mask_path}  "
+                f"frames={len(object_mask_manifest['frames'])}")
+
     clouds: List[np.ndarray] = []
     used = 0
     dropped = 0
+    name_to_frame_index = {
+        os.path.basename(path): idx for idx, path in enumerate(files)
+    }
 
     for f in files:
         img = imread_color(f)
@@ -183,6 +264,11 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
 
         rvec = tvec = None
         s_m = lookup_distance(positions, f) if positions is not None else None
+        angle_deg = (
+            lookup_angle(turntable_angles, f)
+            if turntable_angles is not None else None
+        )
+        frame_index = name_to_frame_index.get(os.path.basename(f))
         if pose_source == "charuco":
             if fitted_charuco_poses is not None:
                 pose = fitted_charuco_poses.get(os.path.basename(f))
@@ -209,17 +295,42 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
                         )
                     dropped += 1
                     continue
-        else:
+        elif pose_source == "rail":
             if s_m is None:
                 if verbose:
                     print(f"  跳过(无导轨行程): {os.path.basename(f)}")
                 dropped += 1
                 continue
+        else:
+            if angle_deg is None:
+                if verbose:
+                    print(f"  跳过(无转台角度): {os.path.basename(f)}")
+                dropped += 1
+                continue
 
         roi_override = None
-        if kf_roi is not None and s_m is not None:
-            roi_override = roi_override_for_distance_m(kf_roi, float(s_m))
-        centers = extract_laser_centers(img, cfg, image_roi_override=roi_override)
+        if kf_roi is not None:
+            param_key = kf_roi.get("parameter_key")
+            if param_key == "frame_index" and frame_index is not None:
+                roi_override = roi_override_for_frame_index(
+                    kf_roi, float(frame_index))
+            elif s_m is not None:
+                roi_override = roi_override_for_distance_m(kf_roi, float(s_m))
+            elif angle_deg is not None:
+                roi_override = roi_override_for_angle_deg(
+                    kf_roi, float(angle_deg))
+        object_mask = None
+        if object_mask_manifest is not None:
+            object_mask, _ = load_object_mask_for_image(
+                object_mask_manifest, f)
+            if object_mask.shape != img.shape[:2]:
+                raise ValueError(
+                    f"物体掩码尺寸与图片不一致: {os.path.basename(f)}")
+        centers = extract_laser_centers(
+            img, cfg,
+            image_roi_override=roi_override,
+            image_mask_override=object_mask,
+        )
         if centers.shape[0] < min_laser:
             dropped += 1
             continue
@@ -233,18 +344,31 @@ def reconstruct(cfg: Dict, image_dir: str, intrinsic_path: str,
 
         if pose_source == "charuco":
             pts_out = transform_cam_to_board(pts_cam, rvec, tvec)
-        else:
+        elif pose_source == "rail":
             pts_out = transform_cam_by_rail_translation(
                 pts_cam,
                 s_m=float(s_m) * distance_scale,
                 axis=axis,
                 s_ref_m=s_ref_m * distance_scale,
             )
+        else:
+            pts_out = transform_cam_by_turntable_rotation(
+                pts_cam,
+                angle_deg=float(angle_deg) * turntable_angle_scale,
+                reference_angle_deg=float(turntable_reference_angle),
+                axis_point_m=turntable_axis_point,
+                axis_direction=turntable_axis_direction,
+            )
 
         clouds.append(pts_out)
         used += 1
         if verbose:
-            extra = f"s={s_m:.6f}m" if pose_source == "rail" else "charuco"
+            if pose_source == "rail":
+                extra = f"s={s_m:.6f}m"
+            elif pose_source == "turntable":
+                extra = f"angle={float(angle_deg):.6f}deg"
+            else:
+                extra = "charuco"
             print(f"  帧 {used}: {pts_out.shape[0]} 点  ({os.path.basename(f)}, {extra})")
 
     if not clouds:

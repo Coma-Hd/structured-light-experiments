@@ -1,0 +1,65 @@
+axis_point_m:
+- 0.0376618987096371
+- -0.14305758240228034
+- 0.3466130326752942
+axis_direction:
+- -0.015284425856972634
+- -0.9248402599025906
+- -0.38004852320398674
+positive_angle_rule: angles.csv 中角度增加时，按 axis_direction 右手定则旋转
+reference_image: img_000000.png
+reference_angle_deg: 0.0
+board_origin_radius_m: 0.1581385914427858
+valid_pose_frames: 44
+angle_span_deg: 90.121710535
+center_model_rms_m: 0.0009689247657595024
+center_model_max_m: 0.0018319713285511131
+rotation_model_rms_deg: 0.8347526149598539
+rotation_model_max_deg: 1.4061555955707854
+mean_reprojection_error_px: 0.6766867353009561
+mean_corner_count: 48.88636363636363
+frame: camera
+quality_passed: true
+quality_checks:
+- name: 有效位姿数量
+  value: 44
+  limit: 10
+  operator: '>='
+  unit: 帧
+  passed: true
+- name: 角度覆盖
+  value: 90.121710535
+  limit: 90.0
+  operator: '>='
+  unit: °
+  passed: true
+- name: 中心模型 RMS
+  value: 0.9689247657595024
+  limit: 1.5
+  operator: <=
+  unit: mm
+  passed: true
+- name: 中心模型最大值
+  value: 1.8319713285511132
+  limit: 3.5
+  operator: <=
+  unit: mm
+  passed: true
+- name: 旋转模型 RMS
+  value: 0.8347526149598539
+  limit: 1.0
+  operator: <=
+  unit: °
+  passed: true
+- name: 旋转模型最大值
+  value: 1.4061555955707854
+  limit: 2.0
+  operator: <=
+  unit: °
+  passed: true
+- name: PnP 平均重投影误差
+  value: 0.6766867353009561
+  limit: 2.0
+  operator: <=
+  unit: px
+  passed: true

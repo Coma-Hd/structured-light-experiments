@@ -1,0 +1,153 @@
+# 匀速转台环绕扫描配置。物体旋转，相机与线激光固定。
+# 相机、激光中心算法、曝光或增益改变后，必须重新标定激光平面。
+pose_source: "turntable"
+
+charuco:
+  squares_x: 14
+  squares_y: 9
+  square_length: 0.020
+  marker_length: 0.015
+  dictionary: "DICT_5X5_100"
+
+laser:
+  method: "steger"
+  # 必须与 calibration/laser_plane.yaml 标定时的响应方式保持一致。
+  # 蓝色光晕负责定位邻域，再在邻域内以亮度寻找饱和白色激光核心。
+  score_mode: "blue_guided_intensity"
+  blue_gate_threshold: 5
+  blue_gate_expand_px: 5
+  score_threshold: 15
+  min_intensity: 16
+  scan_axis: "row"
+  steger_sigma: 2.0
+  score_blur_sigma: 0.0
+  smooth_window: 0
+  quality_filter:
+    enabled: true
+    width_level: 0.5
+    min_width_px: 1
+    max_width_px: 125
+    saturation_threshold: 250
+    # 当前相机的白色亮核约为 10～18 px，4 px 会误删主体激光。
+    max_saturated_width_px: 30
+    max_secondary_peak_ratio: 0.95
+    secondary_exclusion_px: 12
+    continuity_window: 5
+    max_continuity_deviation_px: 4.0
+  dominant_track_filter:
+    enabled: true
+    max_order_gap_px: 3.0
+    max_center_jump_px: 8.0
+    min_anchor_points: 10
+    polynomial_order: 2
+    max_residual_px: 4.0
+    # 允许曲面反光造成的同一真实轨迹短暂断裂，同时排除远端分支。
+    min_secondary_segment_points: 4
+    max_secondary_segment_offset_px: 20.0
+  image_roi:
+    enabled: false
+    normalized: true
+    x_min: 0.0
+    x_max: 1.0
+    y_min: 0.0
+    y_max: 1.0
+  keyframe_roi:
+    # 在本次实际扫描角度范围内均匀选取关键帧手动画框，
+    # 其余帧按转台角度线性插值。
+    enabled: true
+    path: "ceshi/转台扫描/work/roi_keyframes.json"
+  object_mask:
+    # 转台扫描使用五关键帧手动 ROI，不再生成或读取动态物体掩码。
+    enabled: false
+    manifest: "ceshi/转台扫描/work/object_masks/manifest.json"
+    dilate_px: 3
+    grabcut_iterations: 5
+    tracking_grabcut_iterations: 1
+    morphology_px: 7
+    smoothing_px: 9
+    correction_brush_px: 8
+    min_tracking_inlier_ratio: 0.30
+    max_area_change_ratio: 0.35
+
+plane_fit:
+  ransac: true
+  ransac_threshold: 0.001
+  ransac_iters: 1000
+  min_inlier_ratio: 0.65
+  frame_consensus:
+    enabled: true
+    min_point_inlier_ratio: 0.50
+    max_median_factor: 1.50
+    min_good_frames: 8
+    min_good_frame_ratio: 0.50
+
+laser_calibration:
+  charuco_detection_channel: "green"
+  laser_min_score: 40
+  stripe_max_dist_px: 2.5
+  charuco_laser_exclusion_px: 10
+  line_ransac_threshold: 0.001
+  min_line_inlier_ratio: 0.60
+  max_points_per_frame: 120
+
+gating:
+  min_charuco_corners: 6
+  min_laser_points: 12
+  max_reproj_error: 2.0
+
+rail:
+  enabled: false
+
+turntable:
+  enabled: true
+  angles_file: "angles.csv"
+  axis_calibration: "ceshi/转台扫描/calibration/turntable_axis.yaml"
+  # 使用扫描序列第一张图作为零角参考，输出点云保持第一帧时的相机坐标方向。
+  reference_angle_deg: "first"
+  # 若独立测量发现真实转角/名义转角不是 1，可在此修正。
+  angle_scale: 1.0
+
+# 转台轴标定质量门限。任一项超限时仍保存 YAML 供排查，但脚本返回失败，
+# 防止在低质量转轴上继续正式扫描。
+turntable_axis_quality:
+  max_center_rms_mm: 1.5
+  max_center_max_mm: 3.5
+  max_rotation_rms_deg: 1.0
+  max_rotation_max_deg: 2.0
+  max_mean_reprojection_error_px: 2.0
+
+roi:
+  enabled: false
+  mode: "manual"
+  x_min: -1.0
+  x_max: 1.0
+  y_min: -1.0
+  y_max: 1.0
+  z_min: -1.0
+  z_max: 2.0
+
+postprocess:
+  voxel_size: 0.0002
+  sor_neighbors: 20
+  sor_std_ratio: 2.5
+  normal_radius: 0.004
+  normal_max_nn: 40
+  height_map_res: 0.0005
+  mesh_method: "none"
+  poisson_depth: 9
+  surface_trim_k: 0
+  export_aligned: false
+  two_plane_cleanup:
+    enabled: false
+
+pipeline:
+  extract_largest_plane: false
+  finish_mesh: false
+
+paths:
+  intrinsic_images: "ceshi/转台扫描/data/calibration/intrinsic"
+  laser_images: "ceshi/转台扫描/data/calibration/laser_plane"
+  scan_images: "ceshi/转台扫描/data/scan"
+  output: "ceshi/转台扫描/output"
+  camera_intrinsic: "ceshi/转台扫描/calibration/camera_intrinsic.yaml"
+  laser_plane: "ceshi/转台扫描/calibration/laser_plane.yaml"

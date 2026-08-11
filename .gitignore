@@ -17,12 +17,10 @@
 
 /ceshi/*
 !/ceshi/README.md
-!/ceshi/曲面/
-!/ceshi/rail/
+!/ceshi/导轨/
+!/ceshi/转台/
+!/ceshi/手动机械臂/
 !/ceshi/排错与优化文档/
-
-/ceshi/rail/*
-!/ceshi/rail/two_faces/
 
 # Python environments and caches.
 .venv/

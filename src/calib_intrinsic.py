@@ -14,7 +14,7 @@ import numpy as np
 
 from .charuco import CharucoTarget
 from .config import CharucoConfig
-from .io_utils import save_intrinsic
+from .io_utils import imread_color, save_intrinsic
 
 _IMG_EXT = ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tif", "*.tiff")
 
@@ -41,7 +41,7 @@ def calibrate_intrinsic(cfg: Dict, image_dir: str, out_path: str,
     used = 0
 
     for f in files:
-        img = cv2.imread(f)
+        img = imread_color(f)
         if img is None:
             if verbose:
                 print(f"  跳过(读不了): {os.path.basename(f)}")

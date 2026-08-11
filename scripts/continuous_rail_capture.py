@@ -344,6 +344,9 @@ def main() -> int:
     blue_gate_threshold = float(
         cfg.get("laser", {}).get("blue_gate_threshold", 20.0)
     )
+    blue_gate_expand_px = int(
+        cfg.get("laser", {}).get("blue_gate_expand_px", 0)
+    )
 
     try:
         while not finished:
@@ -405,6 +408,7 @@ def main() -> int:
                     frame,
                     score_mode,
                     blue_gate_threshold=blue_gate_threshold,
+                    blue_gate_expand_px=blue_gate_expand_px,
                 )
                 heat = cv2.applyColorMap(score.astype("uint8"), cv2.COLORMAP_JET)
                 preview_frame = cv2.addWeighted(frame, 0.5, heat, 0.5, 0)

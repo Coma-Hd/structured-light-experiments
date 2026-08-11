@@ -24,10 +24,16 @@ def main():
     ap.add_argument("--laser", default=None, help="激光平面 yaml")
     ap.add_argument("--out", default=None, help="输出点云 ply")
     ap.add_argument("--config", default=None)
-    ap.add_argument("--pose-source", choices=["charuco", "rail"], default=None,
-                    help="charuco=固定板位姿/轨迹; rail=手工导轨向量")
+    ap.add_argument(
+        "--pose-source",
+        choices=["charuco", "rail", "turntable"],
+        default=None,
+        help="charuco=固定板位姿; rail=导轨平移; turntable=已标定转轴旋转",
+    )
     ap.add_argument("--positions", default=None,
                     help="rail 或 charuco rail_fit 的 positions.csv")
+    ap.add_argument("--angles", default=None,
+                    help="turntable 的 angles.csv")
     args = ap.parse_args()
     if args.config:
         cfg = load_config(args.config)
@@ -42,7 +48,7 @@ def main():
     reconstruct(
         cfg, image_dir, intrinsic, laser, out_ply,
         pose_source=args.pose_source,
-        positions_file=args.positions,
+        positions_file=args.angles or args.positions,
     )
 
 
